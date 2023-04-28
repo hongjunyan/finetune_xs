@@ -1,0 +1,1495 @@
+<?xml version='1.0' encoding='big5' ?>
+<Scripts Version='2' AppID='DAQ' UserID='JUSTB-1008' Lang='TW' StatusMask='2'>
+<Script Type='3' Name='01.跌不下去的高殖利率股' ID='92d5693bab0f4c0c96e17f6ebbf3c005' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:N(3);
+settotalbar(300);
+setbarback(50);
+condition1 = L = Lowest(L,N);
+
+ret= H = Highest(H,N) and TrueAll(Condition1=false,N);]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="040f89a4-b643-4986-92bb-2d85ab457ddd" version="1"><Param name="N" varname="N" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,f1b429ac13b2447c909302198c18ca56;1,2bca774c6b7549c1b0b008d2a54b288e;1,93ec7a47222349e7ba8a2257d29196e4</RefFunc>
+</Script>
+<Script Type='3' Name='02.股價領先大盤創新高' ID='20a0a4808a72483bbe9cceb6a3cdfa44' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:z(1);
+
+variable:iHigh(0),iLow(10000);
+variable:swDelta(0),LD(0),SD(0);
+
+
+swdelta = GetField("強弱指標")[z] -GetField("強弱指標")[z+1];
+
+LD = summationif(Swdelta>0,swdelta,20);
+SD  =summationif(SWdelta<0,-swdelta,20);
+
+variable:xRatio(0); if SD <> 0 then xRatio =LD/SD else xRatio=0;
+
+if  xRatio = highest(xRatio,20) then
+      iHigh = highest(H[z],10)
+else if  xRatio = lowest(xRatio,20) then
+      iLow = lowest(L[z],10);
+
+if  LS>0 and iHigh > iLow and C > iHigh and C[1] <iHigh then  ret=1;
+//if  LS<0 and iHigh < iLow and C < iLow and C[1] >iLow  then  ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="75976338-39cf-4b43-a734-10645c896b61" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,95a5e49d2f6f4d369865c6de85a56469;1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='03.主力偷偷調節持股後下殺' ID='f8b71c0fb48f441eae3011538770d1d4' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:z(1);
+variable:iHigh(0),iLow(10000);
+variable:swDelta(0),LD(0),SD(0);
+
+swdelta =GetField("收集派發指標")[z] -GetField("收集派發指標")[z+1];
+
+LD = summationif(Swdelta>0,swdelta,20);
+SD  =summationif(SWdelta<0,-swdelta,20);
+
+variable:xRatio(0); if SD <> 0 then xRatio =LD/SD else xRatio=0;
+
+if   xRatio = highest(xRatio,20) then
+      iHigh = highest(H[z],10)
+
+else if  xRatio = lowest(xRatio,20) then
+           iLow = lowest(L[z],10);
+ 
+if  LS>0 and  C > iHigh and C[1] < iHigh then  ret=1;
+if  LS<0 and  C < iLow  and C[1] > iLow  then  ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="890d2d76-7836-4738-a596-a97b800ffa88" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,95a5e49d2f6f4d369865c6de85a56469;1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='04.主力默默收集籌碼後攻堅' ID='e9ccfbb8156c4b0089ec4a0c716875d7' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:z(1);
+variable:iHigh(0),iLow(10000);
+variable:swDelta(0),LD(0),SD(0);
+
+swdelta =GetField("收集派發指標")[z] -GetField("收集派發指標")[z+1];
+
+LD = summationif(Swdelta>0,swdelta,20);
+SD  =summationif(SWdelta<0,-swdelta,20);
+
+variable:xRatio(0); if SD <> 0 then xRatio =LD/SD else xRatio=0;
+
+if   xRatio = highest(xRatio,20) then
+      iHigh = highest(H[z],10)
+
+else if  xRatio = lowest(xRatio,20) then
+           iLow = lowest(L[z],10);
+		   
+if  LS>0 and  C > iHigh and C[1] < iHigh then  ret=1;
+if  LS<0 and  C < iLow  and C[1] > iLow  then  ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="02574923-8dd7-4e06-a70e-075f0ddb7e60" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,95a5e49d2f6f4d369865c6de85a56469;1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='05.股價突破開盤委買大單成本區' ID='2ec94b98c7e24f30b85d6669edfac05e' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:IORatio(0),z(1);
+if GetField("開盤委賣")[z] > 0 then
+	IORatio=GetField("開盤委買")[z]/GetField("開盤委賣")[z]-1;
+
+variable:iHigh(0),iLow(10000);
+
+if IORatio = highest(IORatio,20)  then 
+begin
+ iHigh = H;
+end
+else if IORatio = lowest(IORatio,20) then 
+begin
+ iLow = L;
+end;
+
+
+if  LS>0 and  C > iHigh and C[1] < iHigh then  ret=1;
+if  LS<0 and  C < iLow  and C[1] > iLow  then  ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="acc36e4f-7fbf-4966-97d9-1e88524e7780" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='06.分點進出異常買進訊號' ID='23c07ee76ef44d17a812da1b7479fe3b' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:iHigh(0),iLow(10000);
+variable:IORatio(0),Rdelta(0),z(1),SIORatio(0);
+if GetField("分公司賣出家數")[z] > 0 then  
+   IORatio=GetField("分公司買進家數")[z]/GetField("分公司賣出家數")[z]-1 
+else 
+   IORatio=0;
+
+if GetField("分公司買進家數")[z] > 0 then  
+   SIORatio=GetField("分公司賣出家數")[z]/GetField("分公司買進家數")[z]-1 
+else 
+   SIORatio=0;
+
+if SIORatio = highest(SIORatio,20)  then  iHigh = H;
+if IORatio = highest(IORatio,20)  then iLow = L;
+
+if  LS>0 and  C > iHigh and C[1] < iHigh then  ret=1;
+if  LS<0 and  C < iLow  and C[1] > iLow  then  ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="f513d3db-2429-4e0b-ab4e-6c1f4b302d2f" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='07.分點進出異常賣出訊號' ID='2d01e081d7fa4444b8543327f683034c' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:iHigh(0),iLow(10000);
+variable:IORatio(0),Rdelta(0),z(1),SIORatio(0);
+if GetField("分公司賣出家數")[z] > 0 then  
+   IORatio=GetField("分公司買進家數")[z]/GetField("分公司賣出家數")[z]-1 
+else 
+   IORatio=0;
+
+if GetField("分公司買進家數")[z] > 0 then  
+   SIORatio=GetField("分公司賣出家數")[z]/GetField("分公司買進家數")[z]-1 
+else 
+   SIORatio=0;
+
+if SIORatio = highest(SIORatio,20)  then  iHigh = H;
+if IORatio = highest(IORatio,20)  then iLow = L;
+
+if  LS>0 and  C > iHigh and C[1] < iHigh then  ret=1;
+if  LS<0 and  C < iLow  and C[1] > iLow  then  ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="afa5206c-e95b-4591-bfdc-0be9fa4c5c75" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='08.籌碼沈澱突破買進訊號' ID='d827068529674013bbe643579a958e0e' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+//value1 =GetField("成交金額")[1]-  GetField("成交金額")[1]/v[1]*GetField("當沖張數")[1];
+if (v[1] > 0) then value1 = (v[1] - GetField("當沖張數")[1])/v[1];
+
+if value1[1] >0  then  value2 = 100*value1/value1[1]-100;
+
+if currentbar < 1 then return;
+value3 = standarddev(value2,5,1);
+value4 = standarddev(value2,10,1);
+value5 = standarddev(value2,20,1);
+if value3 = lowest(value3 ,20) and  
+   value4 = lowest(value4 ,20) and 
+   value5 = lowest(value5  ,20) then 
+begin
+   value10 = highest(high[1],20);
+   value11 = lowest(low[1],20);
+end;
+if C crosses over value10 then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="57bfd1cb-b675-49f6-a86c-2852b3b6376c" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,8c2d025a23c548d3a76fba10c22527b4;1,c122bd6485c544f2bce8f374b5c7440d;1,3a62e42e463c46b58e5dee79ae1e581c;1,9c4f476d319b4f109a8dc8557099ded4;1,c1cda70a714d44999e5171fc53c95b0a;1,61c06064ad98469db9ce30287ae4a2c8;1,f1b429ac13b2447c909302198c18ca56;1,2bca774c6b7549c1b0b008d2a54b288e;1,6850ead727a842bf883a1501d030ba98</RefFunc>
+</Script>
+<Script Type='3' Name='09.午餐的奇襲買進訊號' ID='b426c6ee5f254b52b2da84cf1f1c980e' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+input: upRatio(2);		// 高點幅度
+variable:intrabarpersist xHigh(0),xLow(0);
+
+if currenttime < 120000 then 
+begin
+  xHigh =H; xLow=L;
+end
+else
+  Ret=  Close > xHigh and Close >= Close[1] * (1 + upRatio/100);
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="2970c650-9d66-40a0-9f45-f3aceff0da85" version="1"><Param name="upRatio" varname="upRatio" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<script>
+		<freq support="1;2;8;9;10;11;12;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="300" />
+	<IsScriptSetBB val="1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc></RefFunc>
+</Script>
+<Script Type='3' Name='10.天價上影線穿低賣出訊號' ID='13fc6c5d1b43491abbb7d2fb61603448' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(600);
+setbarback(300);
+
+variable:Kprice(0);
+if   H>O*1.03 and C <O and H = Highest(H,255) then Kprice = L;
+
+if c crosses below Kprice then ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="1778ec2a-69b0-4781-8912-a882f06c643c" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="600" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,9dc3f19597ba44fa91524e91ca67aebd</RefFunc>
+</Script>
+<Script Type='3' Name='11.開盤反轉買進訊號' ID='b9d2ad77d04f42b5bf2a27cbd854bd3c' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+if O < C[1] and C > C[1] and C> L*1.01 and currenttime <93000 then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="dea741ab-9dc9-4d05-9579-19b021266b9e" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<script>
+		<freq support="1;2;8;9;10;11;12;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="300" />
+	<IsScriptSetBB val="1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc></RefFunc>
+</Script>
+<Script Type='3' Name='12.開盤五分鐘三創新高' ID='3e41d1de0ac74e489332a450f076e82d' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+variable:KBarOfDay(0); KBarOfDay+=1; if date<>date[1] then  KBarOfDay=1; 
+
+if Date = CurrentDate   and
+   KBarOfDay = 6 and
+   Countif(High > High[1] and Close > Close[1] ,5) >=3  then Ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="255f41b4-f887-44c6-8756-1582ca10cfd3" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,d80cf92ddfcc42e0a6c53ec47edebd49</RefFunc>
+</Script>
+<Script Type='3' Name='13.炒高後無量反轉跌破' ID='65ade55eb87d4216a8ba7cbf59aedf39' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(600);
+setbarback(300);
+
+input: Periods(120); setinputname(1,"計算期數");
+input: Ratio(50);setinputname(2,"期間漲幅%");
+input: Sizes(2000);setinputname(3,"五日均量量縮張數");
+
+if C< O and currenttime>131500 and
+   getfield("融資餘額張數")[1] > 2000 and //昨日融資餘額多於2000張
+   getfield("融券餘額張數")[1] < 2000 and //昨日融券餘額少於2000張
+   close >= close[Periods] *(1 + Ratio*0.01) and //過去半年漲幅超過五成
+   average(volume[1],5) < Sizes and //五日均量低於N張
+   v< 500 and //當日總量
+   GetQuote("OutSize") < 0.5*v //當日外盤量小於總量一半
+then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="731584e6-33ec-4915-bd41-8ed6b7b56a25" version="1"><Param name="計算期數" varname="Periods" type="1" subtype="0" value="120" isSerial="0" isArray="0" isRef="0" /><Param name="期間漲幅%" varname="Ratio" type="1" subtype="0" value="50" isSerial="0" isArray="0" isRef="0" /><Param name="五日均量量縮張數" varname="Sizes" type="1" subtype="0" value="2000" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="600" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,c122bd6485c544f2bce8f374b5c7440d;1,3a62e42e463c46b58e5dee79ae1e581c</RefFunc>
+</Script>
+<Script Type='3' Name='14.投信強買發動' ID='43cf1a7203b94ab09cb88e514f17ecaf' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[{L.J.R. Sep.2014}
+
+input: pastDays(3); setinputname(1,"計算天數");
+input: _BuyRatio(15); setinputname(2,"買超佔比例(%)");
+
+settotalbar(300);
+setbarback(50);
+
+
+variable: SumAm(0),SumForce(0), SumTotalVolume(0),APrice(0),AVGP(0),Kprice(0);
+
+if V[1] <> 0 then 
+	APrice = GetField("成交金額")[1] / V[1]/1000
+else
+	APrice = 0;
+
+SumAm = Summation(GetField("投信買賣超")[1]*APrice, pastDays);
+SumForce = Summation(GetField("投信買賣超")[1], pastDays);
+
+sumTotalVolume = Summation(Volume[1], pastDays);
+
+if SumAm > 30000 and SumForce > SumTotalVolume * _BuyRatio/100 then Kprice =highest(avgprice[1],pastDays);
+
+Ret =C crosses above Kprice;	
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="33fd6af5-adae-45e8-a0a8-7646eb8f6a52" version="1"><Param name="計算天數" varname="pastDays" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" /><Param name="買超佔比例(%)" varname="_BuyRatio" type="1" subtype="0" value="15" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,c122bd6485c544f2bce8f374b5c7440d;1,388033a24d7843e0b867cdc134206623;1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,6850ead727a842bf883a1501d030ba98</RefFunc>
+</Script>
+<Script Type='3' Name='15.多日價量背離跌破' ID='21b195051e08480d99df6e0146885af9' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[
+input:Length(5); setinputname(1,"計算期數");
+input:times(3);setinputname(2,"價量背離次數");
+settotalbar(300);
+setbarback(50);
+
+
+variable:count(0),KPrice(0),hDate(0);
+
+count = CountIf(close > close[1] and volume < volume[1], Length);
+
+if count > times then  begin
+  hDate=Date;
+  Kprice = lowest(l,length);
+end;
+
+if Close crosses below Kprice and DateDiff(Date,hdate) < Length then ret=1;
+
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="a8a038a4-cf5a-4268-884b-4bdf5eb930e2" version="1"><Param name="計算期數" varname="Length" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" /><Param name="價量背離次數" varname="times" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,d80cf92ddfcc42e0a6c53ec47edebd49;1,61c06064ad98469db9ce30287ae4a2c8;1,f1b429ac13b2447c909302198c18ca56;1,9dc3f19597ba44fa91524e91ca67aebd</RefFunc>
+</Script>
+<Script Type='3' Name='16.天量後反轉' ID='04658a87aa534dceb7a44b903cb20d59' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+variable:Maxv(0); MaxV= maxlist(Maxv,v);
+variable:MaxH(0); MaxH= maxlist(MaxH,H);
+variable:Kprice(0);
+if Maxv = v and MaxH = H then Kprice = L;
+
+if  C crosses below KPrice then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="4b2cd5d8-01ac-4715-a3ad-8755aad03338" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,9dc3f19597ba44fa91524e91ca67aebd</RefFunc>
+</Script>
+<Script Type='3' Name='17.開盤三連黑' ID='adacaa920b344e548009eabf520c183a' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+if  Date = Date[2] and Date[2]>Date[3] and
+    Close < Close[1] and Close[1] < Close[2] and
+	Close[2] < Open[2]  then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="3bf746d1-923d-406d-bc3e-d79905b360b2" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<script>
+		<freq support="1;2;8;11;9;12;10;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="300" />
+	<IsScriptSetBB val="1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc></RefFunc>
+</Script>
+<Script Type='3' Name='18.爆量剛起漲' ID='6d4e03d213dc49d69a2687b18a46a1f4' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(600);
+setbarback(300);
+
+if H=highest(H,100) and V =highest(v,100) and  highest(H,100) < lowest(L,100)*1.14 then ret=1;
+
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="f99fe62d-7707-47b6-968c-066829a931ed" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="600" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='19.開盤反轉賣出訊號' ID='a6a813b75da641398adc4151e6346d32' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+if O> C[1] and C< C[1] and C<H*0.99 and currenttime <93000 then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="7898899d-3c95-4366-912e-fa3cf1971ae5" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<script>
+		<freq support="1;2;8;9;10;11;12;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="300" />
+	<IsScriptSetBB val="1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc></RefFunc>
+</Script>
+<Script Type='3' Name='20.烏龜交易策略賣出法則' ID='ac01f6e1f59e4ffbb067cd9282ad58de' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+Ret = L=lowest(L,20);]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="ae532120-bfa7-4765-aa6a-ed5851ca6b72" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='21.烏龜交易策略買進法則' ID='a0f3d037c4474c1c90ee5e292ccba1e1' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+Ret = H=highest(H,20);]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="a0a11923-101d-423d-a173-ae17294f9c29" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='22.平台三角收斂突破' ID='3de045813642461fa220daaa404cf966' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[{L.J.R. Sep.2014}
+
+variable:Kprice(0),BP(C);
+input: Length(5);
+variable: HLine(0); HLine = linearregangle(H/BP,5);
+variable: LLine(0); LLine = linearregangle(L/BP,5);
+
+settotalbar(300);
+setbarback(50);
+
+
+if absvalue(Hline) < 0.1 and LLine > 0.2 then  Kprice = highest(h,Length);
+
+if C >Kprice and C[1] < Kprice  then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="513c01b5-324a-45a3-a25a-da9fd3e27582" version="1"><Param name="Length" varname="Length" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,8c2d025a23c548d3a76fba10c22527b4;1,210d0786cfe340538e34c095bc2ba049;1,7b6d505467f34b67aff3816cf394d90c;1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='23.週轉率高點買進' ID='bedaf67444684d0b90470ca9aea55ab7' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[{L.J.R. Sep.2014}
+settotalbar(300);
+setbarback(110);
+
+variable: _TO(0); _TO = v/  q_CurrentShareCapital/1000;
+variable:Kprice(0);
+
+if _TO = highest(_TO,100) then  Kprice = H;
+
+if C > C[1] and C crosses over Kprice then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="82b1e6e5-2e57-4b4f-ad7c-892530d0e073" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,6850ead727a842bf883a1501d030ba98</RefFunc>
+</Script>
+<Script Type='3' Name='24.突破繼續型態' ID='0065ed9d5b3e4ef68b428f445b545ce2' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:Length(20); setinputname(1,"下降趨勢計算期數");
+input:Rate(150); setinputname(2,"反轉率%");
+settotalbar(300);
+setbarback(50);
+
+variable: Factor(0);
+
+if currentbar= 1 then Factor = 100/Close;
+
+if close > open and  close < close[length] then
+begin
+	value1 = linearregslope(high*Factor,Length);
+	value2 = linearregslope(high*Factor,3);
+	if value1 < 0 and  value2-value1 > Rate*0.01 then ret=1;
+end;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="a4f455b9-6835-4b3c-83ce-a3b4bf5bc1ce" version="1"><Param name="下降趨勢計算期數" varname="Length" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /><Param name="反轉率%" varname="Rate" type="1" subtype="0" value="150" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,8c2d025a23c548d3a76fba10c22527b4;1,210d0786cfe340538e34c095bc2ba049;1,626e6e5c42304bbea9809d1a07ae4e01</RefFunc>
+</Script>
+<Script Type='3' Name='25.多次到頂突破' ID='8b12c391922c4c74947c00ef2cadb1aa' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[{L.J.R. Sep.2014}
+
+input:HitTimes(3);    setinputname(1,"設定觸頂次數");
+input:RangeRatio(1);  setinputname(2,"設定頭部區範圍寬度%");
+input:Length(20);     setinputname(3,"計算期數");
+
+settotalbar(300);
+setbarback(50);
+
+ variable: theHigh(0); theHigh = Highest(High[1],Length);  //找到過去其間的最高點
+variable: HighLowerBound(0);  HighLowerBound = theHigh *(100-RangeRatio)/100;  // 設為瓶頸區間上界
+variable: TouchRangeTimes(0); 							  //期間中進入瓶頸區間的低點次數,每跟K棒要歸0
+ 
+//回算在此區間中 進去瓶頸區的次數 
+TouchRangeTimes = CountIF(High[1] > HighLowerBound, Length);
+ 
+if  TouchRangeTimes >= HitTimes   and  ( q_ask> theHigh or   close > theHigh) then ret=1;
+ ]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="f799775f-1b01-4ba5-8722-208e7922635e" version="1"><Param name="設定觸頂次數" varname="HitTimes" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" /><Param name="設定頭部區範圍寬度%" varname="RangeRatio" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" /><Param name="計算期數" varname="Length" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,d80cf92ddfcc42e0a6c53ec47edebd49</RefFunc>
+</Script>
+<Script Type='3' Name='26.多次到底跌破' ID='5c1a18c774a5480b9a262c3fda389524' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:HitTimes(3);    setinputname(1,"設定觸底次數");
+input:RangeRatio(1);  setinputname(2,"設定底部區範圍寬度%");
+input:Length(20);     setinputname(3,"計算期數");
+
+settotalbar(300);
+setbarback(50);
+
+ 
+variable: theLow(0); theLow = lowest(low[1],Length);  //找到過去期間的最低點
+variable: LowUpperBound(0);  LowUpperBound = theLow *(100+RangeRatio)/100;  // 設為瓶頸區間上界
+variable: TouchRangeTimes(0); TouchRangeTimes=0;  //期間中進入瓶頸區間的低點次數,每根K棒要歸0
+variable: ix(0);
+ 
+for ix = length-1  downto 1 
+begin
+      if Low[ix] < LowUpperBound  then TouchRangeTimes +=1;  //回算在此區間中 進去瓶頸區的次數
+end;
+ 
+if  TouchRangeTimes >= HitTimes   and  (q_bid <theLow  or  close < theLow)  then ret=1;
+ 
+ ]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="19c263ef-391d-499f-8586-e138757d2a91" version="1"><Param name="設定觸底次數" varname="HitTimes" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" /><Param name="設定底部區範圍寬度%" varname="RangeRatio" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" /><Param name="計算期數" varname="Length" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='27.平台整理後突破' ID='da571a30c96d41319fa04e2630ee1336' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:HP(0);HP = Highest(H[1],20);
+variable:LP(0);LP = Lowest(L[1],20);
+variable:MID(0); MID = (HP+LP)/2;
+variable:Q1(0); Q1 = (HP+MID)/2;
+variable:Q2(0); Q2 = (MID+LP)/2;
+
+variable:i(0),j(0);
+
+j=0;
+for i = 1 to 20
+begin
+if (C[i] > MID and C[i+1]< MID)  or
+   (C[i] < MID and C[i+1]> MID) then j+=1;
+end;
+
+condition1 = HP > LP*1.14 and j >8 and average(v,20)>200;
+
+if  LS>0 and  H >HP and condition1 then ret=1;
+if  LS<0 and  L <LP and condition1 then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="eb4bda17-8784-4e3f-8331-0f9fb711813d" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56;1,c122bd6485c544f2bce8f374b5c7440d;1,3a62e42e463c46b58e5dee79ae1e581c</RefFunc>
+</Script>
+<Script Type='3' Name='28.平台整理後跌破' ID='c55ed59191874f00af79a3bec0ad45e9' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:LS(0); setinputname(1,"多空設定");
+settotalbar(300);
+setbarback(50);
+
+variable:HP(0);HP = Highest(H[1],20);
+variable:LP(0);LP = Lowest(L[1],20);
+variable:MID(0); MID = (HP+LP)/2;
+variable:Q1(0); Q1 = (HP+MID)/2;
+variable:Q2(0); Q2 = (MID+LP)/2;
+
+variable:i(0),j(0);
+
+j=0;
+for i = 1 to 20
+begin
+if (C[i] > MID and C[i+1]< MID)  or
+   (C[i] < MID and C[i+1]> MID) then j+=1;
+end;
+
+condition1 = HP > LP*1.14 and j >8 and average(v,20)>200;
+
+if  LS>0 and  H >HP and condition1 then ret=1;
+if  LS<0 and  L <LP and condition1 then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="cd2955ba-d6b8-4a05-a623-fe3f3c7e9c79" version="1"><Param name="多空設定" varname="LS" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56;1,c122bd6485c544f2bce8f374b5c7440d;1,3a62e42e463c46b58e5dee79ae1e581c</RefFunc>
+</Script>
+<Script Type='3' Name='29.突破糾結均線' ID='6c184f6b398e4f28a75a2853ff06c74a' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input: shortlength(5); setinputname(1,"短期均線期數");
+input: midlength(10); setinputname(2,"中期均線期數");
+input: Longlength(20); setinputname(3,"長期均線期數");
+input: Percent(5);  setinputname(4,"均線糾結區間%");
+input: XLen(20);  setinputname(5,"均線糾結期數");
+
+input: Volpercent(25);  setinputname(6,"放量幅度%");//帶量突破的量是超過最長期的均量多少%
+variable: shortaverage(0);
+variable: midaverage(0);
+variable: Longaverage(0);
+variable: AvgHLp(0),AvgH(0),AvgL(0);
+
+settotalbar(300);
+setbarback(50);
+
+shortaverage = average(close,shortlength);
+midaverage = average(close,midlength);
+Longaverage = average(close,Longlength);
+	
+	
+AvgH = maxlist(shortaverage,midaverage,Longaverage);
+AvgL = minlist(shortaverage,midaverage,Longaverage);
+
+if AvgL > 0 then AvgHLp = 100*AvgH/AvgL -100;
+
+condition1= trueAll(AvgHLp < Percent,XLen)  and V >  average(V[1],XLen)*(1+Volpercent/100) ;
+
+
+if C > AvgH *(1.02) and H > highest(H[1],XLen) and condition1 then ret =1;
+
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="eb2a863a-f520-4c6f-9d91-02297f65729c" version="1"><Param name="短期均線期數" varname="shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" /><Param name="中期均線期數" varname="midlength" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /><Param name="均線糾結區間%" varname="Percent" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" /><Param name="均線糾結期數" varname="XLen" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /><Param name="放量幅度%" varname="Volpercent" type="1" subtype="0" value="25" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,c122bd6485c544f2bce8f374b5c7440d;1,3a62e42e463c46b58e5dee79ae1e581c;1,93ec7a47222349e7ba8a2257d29196e4;1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='30.跌破糾結均線' ID='9553a584bbaf40438b10d3bddfab235d' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input: shortlength(5); setinputname(1,"短期均線期數");
+input: midlength(10); setinputname(2,"中期均線期數");
+input: Longlength(20); setinputname(3,"長期均線期數");
+input: Percent(5);  setinputname(4,"均線糾結區間%");
+input: XLen(20);  setinputname(5,"均線糾結期數");
+
+input: Volpercent(25);  setinputname(6,"放量幅度%");//帶量突破的量是超過最長期的均量多少%
+variable: shortaverage(0);
+variable: midaverage(0);
+variable: Longaverage(0);
+variable: AvgHLp(0),AvgH(0),AvgL(0);
+
+settotalbar(300);
+setbarback(50);
+
+shortaverage = average(close,shortlength);
+midaverage = average(close,midlength);
+Longaverage = average(close,Longlength);
+	
+	
+AvgH = maxlist(shortaverage,midaverage,Longaverage);
+AvgL = minlist(shortaverage,midaverage,Longaverage);
+
+if AvgL > 0 then AvgHLp = 100*AvgH/AvgL -100;
+
+condition1= trueAll(AvgHLp < Percent,XLen)  and V >  average(V[1],XLen)*(1+Volpercent/100) ;
+
+
+if C < AvgL *(0.98) and L < lowest(L[1],XLen) and condition1 then ret =1;
+
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="c3897720-693b-4b9e-a364-4975b18b4237" version="1"><Param name="短期均線期數" varname="shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" /><Param name="中期均線期數" varname="midlength" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /><Param name="均線糾結區間%" varname="Percent" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" /><Param name="均線糾結期數" varname="XLen" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /><Param name="放量幅度%" varname="Volpercent" type="1" subtype="0" value="25" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,c122bd6485c544f2bce8f374b5c7440d;1,3a62e42e463c46b58e5dee79ae1e581c;1,93ec7a47222349e7ba8a2257d29196e4;1,61c06064ad98469db9ce30287ae4a2c8;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='31.雙KD向上' ID='1137b26b452642ddaf09196c83d1b6fe' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input: Length(9) ;
+setinputname(1,"KD期數");
+
+settotalbar(300);
+setbarback(50);
+
+variable:rsv1(0),k1(0),d1(0),Kprice(0);//KD
+stochastic(length,3,3,rsv1,k1,d1);
+ret = k1 crosses above d1 ;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="6e3e7235-d2f5-4577-9d2b-fcf16bb9c3ed" version="1"><Param name="KD期數" varname="Length" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56;1,847bcd706dda4a9caf2b783e181a8e42;1,6850ead727a842bf883a1501d030ba98</RefFunc>
+</Script>
+<Script Type='3' Name='32.低PB股的逆襲' ID='cd74d35e4c574b57894ec6bf3912bda5' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+if H = highest(H,20) then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="7c2bca5b-67a6-46a3-afd5-8891ba8cd371" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='33.低預估本益比攻勢發動' ID='5ecb0df84cfa4563b381d782c236356e' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+if H = highest(H,20) then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="1fb5eb63-e81f-469e-9895-ff1ed4e02c66" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='34.上下游股價異常波動' ID='c864d72723d542418c4c8a342bfaf9a6' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+if H = highest(H,20) then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="f87d929a-5df1-47af-9d0e-1b34bb36bb45" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e</RefFunc>
+</Script>
+<Script Type='3' Name='35.近期持續強勢股階梯式上漲' ID='6604dc77c7df44a7ad444a36cbd92dd8' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+
+if barfreq = "Min" and barinterval = 1 and time =91000 and
+   TrueAll(close >Close[1] ,10) then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="c1b35609-34a3-4bd3-99f6-49db2dbe456d" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,93ec7a47222349e7ba8a2257d29196e4</RefFunc>
+</Script>
+<Script Type='3' Name='36.即將鎖第一根漲停的中小型股' ID='9ddbd1e26e4c4246ac95f84925b94fd4' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+input:Length(20); setinputname(1,"過去無漲停期數");
+input:Ratio(1); setinputname(2,"差幾%漲停");
+
+  if q_Last > q_DailyUplimit*(1- Ratio/100)  and
+    TrueAll(close[1] < Close[2]*1.068,Length) then ret=1;
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="7177694e-bce5-4b97-a52d-a3c74c6b4a63" version="1"><Param name="過去無漲停期數" varname="Length" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /><Param name="差幾%漲停" varname="Ratio" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,93ec7a47222349e7ba8a2257d29196e4</RefFunc>
+</Script>
+<Script Type='3' Name='37.開高後不拉回的中小型股' ID='acf5ca61aaab47dba8085120cb72b06b' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[{
+input:Ratio(2.5); setinputname(1,"開高幅度%");
+input:aRatio(1); setinputname(2,"拉回度%上限");
+
+if barfreq ="Min" and barinterval <=15 and time <= 091500 and
+   q_DailyOpen > q_RefPrice *(1+Ratio/100) and 
+   q_Last > q_DailyHigh* (1- aRatio/100) 
+then ret=1;
+}
+
+input:sp(1);		setinputname(1,"回檔最大幅度");
+input:opl(2);		setinputname(2,"開高最小幅度");
+input:oph(4);		setinputname(3,"開高最大幅度");
+
+settotalbar(300);
+setbarback(50);
+
+if time>0905 
+then 
+begin
+  if open>=close[1]*(1+opl/100)
+     and close<=close[1]*(1+oph/100)
+     and low>open*(1-sp/100)
+     and close=high
+     and close[1]<close[3]*1.04//前三天漲幅不到4%
+  then ret=1;
+end;
+
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="9cc95d49-134f-4de0-bb51-d125dab84924" version="1"><Param name="回檔最大幅度" varname="sp" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" /><Param name="開高最小幅度" varname="opl" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" /><Param name="開高最大幅度" varname="oph" type="1" subtype="0" value="4" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<script>
+		<freq support="1;2;8;11;9;12;10;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="300" />
+	<IsScriptSetBB val="1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc></RefFunc>
+</Script>
+<Script Type='3' Name='38.火箭後拉回的中小型股' ID='287b15d7da85461aabc50649ae1f585a' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(300);
+setbarback(50);
+
+if barfreq ="Min" and barinterval =1 and
+   close[1]/close[2]>1.015 and //上個1分鐘線單分鐘拉超過1.5%
+   q_dailyhigh > high and //高不過高
+   q_Last < q_dailyhigh*0.99 and //自高檔回1%
+   q_Last > Low[1] and 
+   q_Last > q_refPrice
+then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="b436667f-e2dd-41b0-9d3b-82182f2400a7" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<script>
+		<freq support="1;2;8;9;10;11;12;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="300" />
+	<IsScriptSetBB val="1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc></RefFunc>
+</Script>
+<Script Type='3' Name='39.中小型股整理結束' ID='eff8b807de364b20bddad27cae105ea3' ReturnType='0' ExecType='1' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[//盤整後噴出
+input: Periods(20); setinputname(1,"計算期數");
+input: Ratio(3);setinputname(2,"近期波動幅度%");
+input: Direction(1);setinputname(3,"方向:1突破 -1跌破");
+input: TXT1("僅適用60分鐘"); setinputname(4,"使用限制");
+
+settotalbar(300);
+setbarback(50);
+
+condition1 = false;
+
+if (highest(high[1],Periods-1) - lowest(low[1],Periods-1))/close[1] <= ratio*0.01 
+then condition1=true//近期波動在?%以內
+else return;
+
+if condition1 and Direction > 0 and high = highest(high, Periods)
+then ret=1;//盤整後往上突破
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="094c46fb-ef5d-445e-9f19-7ec9065724f1" version="1"><Param name="計算期數" varname="Periods" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" /><Param name="近期波動幅度%" varname="Ratio" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" /><Param name="方向:1突破 -1跌破" varname="Direction" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" /><Param name="使用限制" varname="TXT1" type="3" subtype="0" value="僅適用60分鐘" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="300" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56</RefFunc>
+</Script>
+<Script Type='3' Name='40.大單敲進線又棒的中小型股' ID='24525df2524f4739b5cbc839b0667d41' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input: atVolume(100); setinputname(1,"大單門檻(萬)");
+input: LaTime(10); setinputname(2,"大單筆數");
+
+settotalbar(300);
+setbarback(50);
+
+variable:  intrabarpersist Xtime(0);//計數器
+variable: intrabarpersist Volumestamp(0);
+
+Volumestamp =q_DailyVolume;
+
+if Date> date[1] or Volumestamp = Volumestamp[1]  then Xtime =0; //開盤那根要歸0次數
+
+if q_tickvolume*q_Last {*1000} > atVolume*10{*1000} and GetQuote("BidAskFlag")=1 then  Xtime+=1; //量夠大就加1次
+
+if Xtime > LaTime  then 
+begin
+	ret=1; 
+	Xtime=0;
+end;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="024a01fc-42e4-4124-95f4-f8ebf7616389" version="1"><Param name="大單門檻(萬)" varname="atVolume" type="1" subtype="0" value="100" isSerial="0" isArray="0" isRef="0" /><Param name="大單筆數" varname="LaTime" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<script>
+		<freq support="1;2;8;11;9;12;10;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="300" />
+	<IsScriptSetBB val="1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc></RefFunc>
+</Script>
+<Script Type='3' Name='41.投信初介入' ID='398db383e1a24a58977db00d2caa602b' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[settotalbar(130);
+setbarback(65);
+
+condition1 = GetField("投信持股比例")[1]=0 and GetField("投信買賣超")[1]=0;
+
+RET = H>H[1] and TrueAll(condition1[1],60) and GetField("投信買賣超")[1]*C>1000;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="3448529a-b369-4bd4-80bd-30885bc2e122" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[<Plots />]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="50" />
+	<TotalBar val="130" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='1' /><RefFunc>1,93ec7a47222349e7ba8a2257d29196e4</RefFunc>
+</Script>
+</Scripts>

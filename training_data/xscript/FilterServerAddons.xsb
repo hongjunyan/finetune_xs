@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='big5' ?>
+<Scripts Version='2' AppID='DAQ' UserID='JUSTB-1008' Lang='TW' StatusMask='2'>
+<Script Type='4' Name='多空趨勢變化' ID='19dda134b7c540c88233d72d8a58e427' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input:P1(0); 			setinputname(1,"多空設定");	// P1=1(多), -1(空)
+input:Period(5); 		setinputname(2,"評估期間");	// 5
+input:VolumePrice(0.1);	setinputname(3,"成交值限制(億)");
+
+settotalbar(168);
+
+variable:score(0); score =techscore;
+variable:cdate(0);
+variable:lastscore(0); 
+variable:dist(0);
+
+if P1 > 0 then
+begin
+	// 最近N日內, crosses over 5, 未跌破10, 且區間斜率向上 
+	//
+	if cdate = 0 and score crosses above 5 then
+	begin
+		cdate = date;
+		lastscore = score;
+	end;
+
+	if cdate > 0 and (score crosses below 10 or score < 5) then
+	begin
+		cdate = 0;
+		lastscore = 0;
+	end;
+	
+	Ret = cdate > 0 and DateDiff(Date, cdate) < Period and score[0] >= lastscore and GetField("成交金額","D") > VolumePrice;
+end;
+
+
+if P1 < 0 then
+begin
+	// 最近N日內, crosses below 10, 未反彈到5, 且區間斜率向下 
+	//
+	if cdate = 0 and score crosses below 10 then
+	begin
+		cdate = date;
+		lastscore = score;
+	end;
+
+	if cdate > 0 and (score crosses above 5 or score > 10) then
+	begin
+		cdate = 0;
+		lastscore = 0;
+	end;
+	
+	Ret = cdate > 0 and DateDiff(Date, cdate) < Period and score[0] <= lastscore and GetField("成交金額","D") > VolumePrice;
+end;
+
+{
+setoutputname1("S[0]");		outputfield1(score[0]);
+setoutputname2("S[1]");		outputfield2(score[1]);
+setoutputname3("S[2]");		outputfield3(score[2]);
+setoutputname4("S[3]");		outputfield4(score[3]);
+setoutputname5("S[4]");		outputfield5(score[4]);
+setoutputname6("S[5]");		outputfield6(score[5]);
+}
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="5460b830-a21a-4a43-bd39-5837819d8e49" version="1"><Param name="多空設定" varname="P1" type="1" subtype="0" value="0" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="評估期間" varname="Period" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="成交值限制(億)" varname="VolumePrice" type="1" subtype="0" value="0.1" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="0" />
+	<script>
+		<freq support="8;9;10;11;12;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="168" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='0' /><RefFunc>1,f2404d9ffb2f49b3a38c431fcfc254b5;1,de75aec76c414cb0b78812a623b506e8;1,6bbc72256c3d4dbd9c7b3abd21a0be15;1,8c2d025a23c548d3a76fba10c22527b4;1,c122bd6485c544f2bce8f374b5c7440d;1,3a62e42e463c46b58e5dee79ae1e581c;1,9c4f476d319b4f109a8dc8557099ded4;1,c1cda70a714d44999e5171fc53c95b0a;1,36d1fc033c6f48f8a136f9e1fdec110f;1,81394f9cf0c8469ea5f8832700aec8b7;1,9e03682196e24611b2fe326b6a56433d;1,210d0786cfe340538e34c095bc2ba049;1,626e6e5c42304bbea9809d1a07ae4e01;1,d64c2a71d3ea43d985ca22ef62a5a8de;1,d02c45cba76f4163a048685f7bc4002b;1,8216021f4b11489b8faca5f2af7d0750;1,239cb1c1f329431ea731982d8f5d94f2;1,607a9823aec54a91ab43847239ccd4dd;1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56;1,847bcd706dda4a9caf2b783e181a8e42;1,7721dca8cc7242c09d21b782bbb59bd9;1,d21d5975992d4975839416bad676689d;1,162ffb45c75346a596029f2fea1df8c2;1,31df812470ed4d30af3a7592649c9054;1,1ac64461c4f341bc8e1d3ac1998fd29e;1,ddfa7b29d6b7403597861b78e9f6aad7;1,6850ead727a842bf883a1501d030ba98;1,9dc3f19597ba44fa91524e91ca67aebd</RefFunc>
+</Script>
+<Script Type='4' Name='低預估本益比攻勢發動' ID='c1acff58f8694fa0a8f658cfa1bd3b5b' ReturnType='0' ExecType='2' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input: EstPE(8);		setinputname(1, "預估PE上限");
+
+SetTotalBar(3); 
+
+// 改用營業利益*4來估算
+//
+value1 = GetField("營業利益", "Q")* 4;	// 單位=百萬
+value2 = GetField("最新股本");		// 單位=億
+value3 = value1 / (value2*10);
+
+if value3 > 0 then
+  value4 = close / value3;
+
+ret = value4 >0 and value4 <= EstPE;
+
+setoutputname1("(估)每股盈餘");
+outputfield1(value3);
+
+setoutputname2("最新一期EPS");
+outputfield2(GetField("每股稅後淨利(元)","Q"));
+
+setoutputname3("(估)PE");
+outputfield3(value4);
+
+setoutputname4("PE");
+outputfield4(GetField("本益比","D"));
+
+
+{
+variable: ProfitRatio(0);   
+variable: Avg(0);
+variable: AvgGrowth(0);   
+variable: forecast(0); 
+variable: foreEPS(0); 
+variable: predictPEratio(0); 
+variable: YearProfit(0);
+
+// Derek: 改用最近4期季資料累加, 反應速度比年報快	
+YearProfit = Summation(GetField("本期稅後淨利","Q"), 4);
+ProfitRatio= YearProfit/GetField("加權平均股本","Q");  
+Avg =average(ProfitRatio,8); 
+if Avg[4] > 0 and YearProfit > 0 then   // Derek: 都要 > 0, 免得負負得正
+begin
+	AvgGrowth =Avg/Avg[4];
+	forecast = YearProfit*AvgGrowth;
+	foreEPS = forecast / (GetField("最新股本")*100);
+	if foreEPS > 0 then
+	  begin
+		predictPEratio = GetField("Close", "D")/foreEPS;
+		ret= predictPEratio > 0 and predictPEratio < EstPE;
+	  end;
+end;
+
+outputfield1(predictPEratio);	setoutputname1("預估PE");
+outputfield2(foreEPS);			setoutputname2("預估EPS");
+outputfield3((AvgGrowth - 1) * 100);	setoutputname3("預估成長率(%)");
+outputfield4(Summation(GetField("每股稅後淨利(元)","Q"), 4)); setoutputname4("近四期EPS");
+}
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="59dd584f-f345-46ac-a0be-c3b4ef8cd3dd" version="1"><Param name="預估PE上限" varname="EstPE" type="1" subtype="0" value="8" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="0" />
+	<script>
+		<freq support="8;9;10;11;12;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="3" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='0' /><RefFunc></RefFunc>
+</Script>
+<Script Type='4' Name='投信初介入' ID='4c97cb82d9614437a850e39ee5ab4701' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[condition1 = GetField("投信持股比例")=0 and GetField("投信買賣超")=0;
+
+RET =  TrueAll(condition1[1],60) and  GetField("投信買賣超")*C>1000;
+
+SetTotalBar(3); 
+]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="79d3218c-ddd9-403a-adfb-33f4f6c5e917" version="1" />]]>
+</Arg>
+<Plots>
+<![CDATA[]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="0" />
+	<script>
+		<freq support="8;11;9;12;10;13" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="3" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='0' /><RefFunc>1,93ec7a47222349e7ba8a2257d29196e4</RefFunc>
+</Script>
+<Script Type='4' Name='雙KD向上' ID='09a11a817938460caaa466e699b0b3cb' ReturnType='0' ExecType='3' Folder='/雲端策略中心/' StatusMask='2'>
+<Desc>
+<![CDATA[]]>
+</Desc>
+<Code>
+<![CDATA[input: Length(9) ;
+setinputname(1,"KD期數");
+
+SetTotalBar(Length * 3);
+
+variable:rsv1(0),k1(0),d1(0);//KD
+stochastic(length,3,3,rsv1,k1,d1);
+if k1 crosses above d1 then ret=1;]]>
+</Code>
+<Arg>
+<![CDATA[<Arg seed="32e965a6-5a33-4508-9876-6eaac9074b32" version="1"><Param name="KD期數" varname="Length" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]>
+</Arg>
+<Plots>
+<![CDATA[]]>
+</Plots>
+<Extra>
+<![CDATA[<Extra>
+	<Maxbb val="0" />
+	<script>
+		<freq support="8;9;10;11;12;13;14;15;16" />
+	</script>
+	<IsScriptSetTB val="1" />
+	<TotalBar val="-1" />
+</Extra>
+]]>
+</Extra>
+<ScriptRunVer val='0' /><RefFunc>1,61c06064ad98469db9ce30287ae4a2c8;1,2bca774c6b7549c1b0b008d2a54b288e;1,f1b429ac13b2447c909302198c18ca56;1,847bcd706dda4a9caf2b783e181a8e42;1,6850ead727a842bf883a1501d030ba98</RefFunc>
+</Script>
+</Scripts>

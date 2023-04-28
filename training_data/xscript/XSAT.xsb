@@ -1,0 +1,2875 @@
+<Scripts Version="3" AppID="DAQ" UserID="JUSTB-1008" Lang="TW" StatusMask="2">
+<Script Type="7" Name="均線死亡交叉" ID="207ef092e57e49619566684f29a3fa92" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: Shortlength(5,"短期均線期數"), Longlength(20,"長期均線期數");
+
+// 資料讀取筆數設定
+settotalbar(8);
+setbarback(maxlist(Shortlength,Longlength,6));
+
+// 空方進場策略：長期均線「死亡」交叉短期均線。出場策略：短期均線「黃金」交叉長期均線。
+if Average(Close,Shortlength) Cross Below Average(Close,Longlength) then setposition(-1);
+if Average(Close,Shortlength) Cross Above Average(Close,Longlength) then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="bf1e4e78-5f13-47a1-8d2a-780e669a013e" version="1"><Param name="短期均線期數" varname="Shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="60486944-7376-41d9-a66b-bb18ed83b1d1" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="8" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="帶量死亡交叉均線" ID="787a1399f87b4413a5e7638e4b3a92ce" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: Length(10, "期數"), VolFactor(2, "成交量放大倍數");
+var: avgP(0), avgVol(0);
+
+// 設定資料讀取筆數
+settotalbar(3);
+setbarback(Length);
+
+avgP = Average(close, Length);
+avgVol = Average(volume, Length);
+
+// 空方進場策略：帶量死亡交叉均線；出場策略：帶量黃金交叉均線。
+if close cross below avgP and volume > avgVol * VolFactor then setposition(-1);
+if close cross above avgP and volume > avgVol * VolFactor then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="7a917fa9-fa33-418b-b9a7-c998ea9b55f6" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="成交量放大倍數" varname="VolFactor" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="e68ee7a6-3ae3-4591-bb46-52e4d5627b89" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;11;9;12;10;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="DIF黃金交叉MACD" ID="b447ba4070f74095bc24d43d9faba2c3" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 需告參數
+input: FastLength(12, "DIF短期期數"), SlowLength(26, "DIF長期期數"), MACDLength(9, "MACD期數");
+variable: difValue(0), macdValue(0), oscValue(0);
+
+// 資料讀取筆數設定
+SetTotalBar((maxlist(FastLength,SlowLength,6) + MACDLength) * 3 + 8);
+
+MACD(weightedclose(), FastLength, SlowLength, MACDLength, difValue, macdValue, oscValue);
+
+// 多方進場策略：DIF黃金交叉MACD；出場策略：DIF死亡交叉MACD
+if difValue Crosses Above macdValue then setposition(1);
+if difValue Crosses below macdValue then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="7b8ec81c-0779-4afb-a680-67221b4ce0e2" version="1"><Param name="DIF短期期數" varname="FastLength" type="1" subtype="0" value="12" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="DIF長期期數" varname="SlowLength" type="1" subtype="0" value="26" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="MACD期數" varname="MACDLength" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="3da8159a-da94-4102-b432-9f1826af59c5" version="1" />]]></Plots>
+<RefFunc>1,WeightedClose;1,MACD;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="RSI高檔價格背離" ID="0eb0c46518df4b4f86da6893dea7148a" ReturnType="0" ExecType="3" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+Input: RSILength(10, "RSI期數"), _LThreshold(20, "低檔值"), _HThreshold(80, "高檔值");
+variable: rsiValue(0),RSI_linearregslope(0),Close_linearregslope(0);
+
+// 資料讀取筆數設定
+settotalbar(maxlist(RSILength,6) * 8 + 8);
+
+if RSILength < 5 then raiseruntimeerror("計算期別請超過五期");
+RSIValue = RSI(Close, RSILength);
+RSI_linearregslope = linearregslope(RSIValue, RSILength);
+Close_linearregslope = linearregslope(Close, RSILength);
+
+// 空方進場策略：RSI由上往下穿越高檔區，且價格趨勢背離。出場策略：RSI由下往上突破低檔區，且價格趨勢背離。
+if RSIValue Crosses Below _HThreshold and RSI_linearregslope < 0 and Close_linearregslope > 0 then setposition(-1);
+if RSIValue Crosses Above _LThreshold and RSI_linearregslope > 0 and Close_linearregslope < 0 then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="4d3bb0b8-00fb-45cc-a695-4ef6a73d446c" version="1"><Param name="RSI期數" varname="RSILength" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="低檔值" varname="_LThreshold" type="1" subtype="0" value="20" isSerial="1" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="高檔值" varname="_HThreshold" type="1" subtype="0" value="80" isSerial="1" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="470d206a-d642-4e88-b6a2-a2150ad2c1a5" version="1" />]]></Plots>
+<RefFunc>1,RSI;1,LinearRegSlope;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="03-分量權重交易(VWAP)" ID="32759e6ba00d435bbc29d047041a38e1" ReturnType="0" ExecType="1" Folder="/3-Algo策略委託/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	分量權重(VWAP): 把預期委託數量依照歷史成交量分布, 在指定的時間範圍送出內, 預期成交均價可以接近歷史均價
+	
+	輸入參數:
+
+	- 統計天數 (vwap_days: 決定要用前幾天的成交量統計)
+	- 開始交易時間 (start_hhmm: 交易開始時間, 格式為hhmm, 例如0905, 表示從09:05開始進行交易)
+	- 結束交易時間 (end_hhmm: 交易結束時間, 格式為hhmm, 例如1300, 表示交易到1300就停止)
+	- 交易數量 (order_totalqty: 預計交易的數量)
+	- 交易方向 (order_bs: 1=買進, -1=賣出)
+	
+	執行邏輯:
+	
+	- 策略起動時根據vwap_days統計出每分鐘的成交數量分佈比例(從09:00~13:30),
+	- 依照指定的交易區間(start_hhmm ~ end_hhmm), 以及預期交易數量, 決定每分鐘的委託數量,
+	- 舉例
+		- start_hhmm = 09:10, end_hhmm = 10:00
+		- 依照歷史統計, 09:10的成交量=1%, 09:11的成交量=0.8%, .. 09:59的成交量=1.5%
+		- 假設order_totalqty = 500, 則
+		- 在09:11(09:10結束時), 送出500 * 1% / (1% + 0.8% + .. + 1.5%), 
+		- 在09:12(09:11結束時), 送出500 * 0.8% / (1% + 0.8% + .. + 1.5%),
+		- 在10:00(09:59結束時), 送出500 * 1.5% / (1% + 0.8% + .. + 1.5%),
+		- 也就是說, 在指定時間範圍內, 依照歷史成交量的分佈, 每分鐘送出委託,
+	
+}
+
+input: vwap_days(1, "用前N日的資料來計算成交量分佈");
+input: start_hhmm(0905, "分鐘起點(HHMM)");
+input: end_hhmm(1000, "分鐘終點(HHMM)");
+input: order_totalqty(1000, "總委託數量");
+input: order_bs(1, "買賣方向", inputKind:=Dict(["買進", 1], ["賣出", -1]));
+
+if start_hhmm >= end_hhmm then raiseruntimeerror("開始時間必須 < 結束時間");
+
+{ 請確認Backbar有足夠的空間可以讀入vwap_days的資料 }
+
+var: intrabarpersist vwap_started(false);
+var: intrabarpersist vwap_base_position(0);
+var: intrabarpersist vwap_time_index(0);
+array: intrabarpersist vwap_dist[](0);		// N日統計分佈, 總共有total_minute格, 每一格是到目前為止的百分比
+var: intrabarpersist vwap_totalminutes(0);
+
+var: intrabarpersist start_hhmmss(0), intrabarpersist end_hhmmss(0); 
+
+var: start_condition(false);			{ 啟動定時定量委託 }
+
+if not vwap_started and GetInfo("TradeMode") = 1 then begin
+
+	// 如果使用者指定 09:01 ~ 10:00, 因為分K是標在時間起點, 
+	// 所以我們要統計的是09:01 ~ 09:59這些分K的成交量分佈 (所以end_hhmm會-1分鐘)
+
+	start_hhmmss = start_hhmm * 100;
+	end_hhmmss = TimeAdd(end_hhmm * 100, "M", -1);
+
+	CalcVWAPDistribution(vwap_days, start_hhmmss, end_hhmmss, vwap_dist);
+	vwap_totalminutes = Array_GetMaxIndex(vwap_dist);
+	vwap_started = true;
+	vwap_base_position = Position;
+	vwap_time_index = 0;
+end;
+
+{ VWAP的執行邏輯 }
+
+if vwap_started and Position <> vwap_base_position + order_bs * order_totalqty then begin
+	if CurrentTime >= start_hhmmss then begin
+		{ 計算目前時間是開始時間後的第幾分鐘 }
+		value1 = IntPortion(TimeDiff(CurrentTime, start_hhmmss, "M"));
+		
+		if value1 > vwap_time_index then begin
+			{ 預期的成交量比例  = vwap_dist[value1] }
+			if value1 >= vwap_totalminutes then 
+				value2 = 100				{ 超過時間 => 100% }
+			else	
+				value2 = vwap_dist[value1];
+
+			value3 = value2	* order_totalqty * order_bs / 100;
+			
+			if Position <> vwap_base_position + value3 then begin
+				{ 送出委託單 }
+				SetPosition(vwap_base_position + value3);	{ TODO: 請填入委託價格 }
+			end;	
+			vwap_time_index = value1;
+		end;
+	end;
+end;	
+
+
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="1fe455aa-a104-4118-b1ca-21e62701f43e" version="1"><Param name="用前N日的資料來計算成交量分佈" varname="vwap_days" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="分鐘起點(HHMM)" varname="start_hhmm" type="1" subtype="0" value="905" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="分鐘終點(HHMM)" varname="end_hhmm" type="1" subtype="0" value="1000" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="總委託數量" varname="order_totalqty" type="1" subtype="0" value="1000" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="買賣方向" varname="order_bs" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" inputkind="1" quickedit="0" keytype="3"><Pair key="買進" value="1" /><Pair key="賣出" value="-1" /></Param></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="6e5977d8-def5-4589-8ab4-733ce3be80bd" version="1" />]]></Plots>
+<RefFunc>1,CalcVWAPDistribution</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="01-定時定量交易" ID="57047d69788049c7bd7df3b7339194a1" ReturnType="0" ExecType="1" Folder="/3-Algo策略委託/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	定時定量: 每隔多久送出一筆委託, 下多少筆之後就停止
+	
+	輸入參數:
+
+	- 下單間隔 (order_interval: 每隔幾(秒)送出一筆委託)
+	- 下單數量 (order_qty: 每一筆委託的數量)
+	- 買賣方向 (order_bs: 1=買進, -1=賣出)
+	- 委託筆數 (order_count: 總共要送出幾筆)	
+
+	
+}
+
+input: order_interval(60, "下單間隔(秒)");
+input: order_qty(1, "每次下單數量");
+input: order_bs(1, "買賣方向", inputKind:=Dict(["買進", 1], ["賣出", -1]));
+input: order_count(10, "下單筆數");
+
+{ 
+	範例:
+	
+	策略一啟動就啟動定時定量交易, 全部送完就停止
+}
+
+var: intrabarpersist exec_order_started(false);
+var: intrabarpersist exec_order_lasttime(0);
+var: intrabarpersist exec_order_count(0);
+
+if not exec_order_started and GetInfo("TradeMode") = 1 then begin
+	exec_order_started = true;		{ 啟動定時定量委託 }
+	exec_order_count = 0;
+	exec_order_lasttime = 0;
+end;
+
+{ 定時定量的執行邏輯 }
+if exec_order_started and exec_order_count < order_count then begin
+	if exec_order_lasttime = 0 or TimeDiff(CurrentTime, exec_order_lasttime, "S") >= order_interval then begin
+		{ 執行委託 }
+		Print("order_bs=", order_bs, "order_qty=", order_qty);
+		SetPosition(position + order_bs * order_qty);			{ TODO: 請填入委託價格 }
+		exec_order_count = exec_order_count + 1;
+		exec_order_lasttime = CurrentTime;
+	end;
+end;	
+]]></Code>
+<Arg><![CDATA[<Arg seed="201c1e0e-d9a2-4557-b54c-f1ec96650dcd" version="1"><Param name="下單間隔(秒)" varname="order_interval" type="1" subtype="0" value="60" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="每次下單數量" varname="order_qty" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="買賣方向" varname="order_bs" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" inputkind="1" quickedit="0" keytype="3"><Pair key="買進" value="1" /><Pair key="賣出" value="-1" /></Param><Param name="下單筆數" varname="order_count" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="86b720d8-4182-4b7c-a274-c02ac897911e" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="KD低檔黃金交叉" ID="65d09a47fd1f444a88f6bd50a9221084" ReturnType="0" ExecType="3" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: Length(9, "計算期數"), RSVt(3, "RSVt權數"), Kt(3, "Kt權數"), LowBound(25, "低檔區"), HighBound(75, "高檔區");
+variable: _rsv(0), _k(0), _d(0);
+
+// 資料讀取筆數設定
+SetTotalBar(maxlist(Length,6) * 3 + 8);
+
+Stochastic(Length, RSVt, Kt, _rsv, _k, _d);
+
+// 多方進場策略：K在低檔區由下往上突破D值。出場策略：K由上往下穿越D值。
+if _k < LowBound and _k crosses above _d then setposition(1);
+if _k > HighBound and _k crosses under _d then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="ec2ab15c-08af-4cc2-87a6-74796e5c0601" version="1"><Param name="計算期數" varname="Length" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="RSVt權數" varname="RSVt" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="Kt權數" varname="Kt" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="低檔區" varname="LowBound" type="1" subtype="0" value="25" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="高檔區" varname="HighBound" type="1" subtype="0" value="75" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="39f14c65-f11d-47a8-bf3d-f529b8622696" version="1" />]]></Plots>
+<RefFunc>1,Stochastic;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="02-時間權重交易(TWAP)" ID="2736c04c664b401aaee51a622ad80bfd" ReturnType="0" ExecType="1" Folder="/3-Algo策略委託/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	時間權重(TWAP): 類似定時定量交易, 差異是傳入的是執行委託總時間以及委託總數量, 由腳本自己反推算委託間隔/每次委託數量.
+
+	輸入參數:
+
+	- 下單總時間 (order_duration: 在未來的幾(秒)內要執行完畢)
+	- 下單總數量 (order_totalqty: 委託的總數量)
+	- 買賣方向 (order_bs: 1=買進, -1=賣出)
+	
+	
+	把預期委託數量平均分配在指定的時間範圍內, 例如指定在未來的60分鐘內買進100張
+}
+
+input: order_duration(3600, "委託區間(秒)");
+input: order_totalqty(100, "總委託數量");
+input: order_bs(1, "買賣方向", inputKind:=Dict(["買進", 1], ["賣出", -1]));
+
+{ 
+	範例:
+	
+	策略一啟動就啟動定時定量交易, 全部送完就停止
+}
+
+var: intrabarpersist exec_order_started(false);
+var: intrabarpersist exec_order_starttime(0);
+var: intrabarpersist exec_order_startposition(0);
+var: intrabarpersist exec_order_endposition(0);
+
+if not exec_order_started and GetInfo("TradeMode") = 1 then begin
+	exec_order_started = true;		{ 啟動定時定量委託 }
+	exec_order_starttime = CurrentTime;
+	exec_order_startposition = Position;
+	exec_order_endposition = Position + order_bs * order_totalqty;
+end;
+
+{ 時間權重的執行邏輯 }
+if exec_order_started and Position <> exec_order_endposition then begin
+	var: duration(0), target_position(0);
+	
+	duration = TimeDiff(CurrentTime, exec_order_starttime, "S");
+	target_position = order_bs * Floor(order_totalqty * duration / order_duration) + exec_order_startposition;
+	
+	if Position <> target_position then begin
+		SetPosition(target_position);		{ TODO: 請填入委託價格 }
+	end;	
+end;	
+
+
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="ee6468be-a039-4e7f-bd1f-7dfcbcb3cff7" version="1"><Param name="委託區間(秒)" varname="order_duration" type="1" subtype="0" value="3600" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="總委託數量" varname="order_totalqty" type="1" subtype="0" value="100" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="買賣方向" varname="order_bs" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" inputkind="1" quickedit="0" keytype="3"><Pair key="買進" value="1" /><Pair key="賣出" value="-1" /></Param></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="46c6016b-ac50-45b3-bf37-6dae246f97ba" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<TotalBar val="0" />
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="股價黃金交叉雙均線" ID="7e1601d46fa14b38b8cde5defb06631e" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: shortlength(5,"短期均線期數"), Longlength(20,"長期均線期數");
+variable: Longaverage(0), shortaverage(0);
+
+// 資料讀取筆數設定
+settotalbar(3);
+setbarback(maxlist(shortlength,Longlength));
+
+Longaverage = Average(close,Longlength);
+shortaverage= Average(close,shortlength);
+
+// 多方進場策略：收盤價黃金交叉雙均線。出場策略：收盤價死亡交叉雙均線。
+if close cross above maxlist(shortaverage, longaverage) then setposition(1);
+if close cross below minlist(shortaverage, longaverage) then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="2543cfc4-0454-491b-87ea-85b124f3efad" version="1"><Param name="短期均線期數" varname="shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="8f4e8714-408f-47bb-aeb3-c09f5c9f5199" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="03-空單固定停利停損(點)" ID="985b2d67a84643d0928170110d72ac89" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	空單停損(點)
+}
+
+input: profit_point(10, "停利(點)");
+input: loss_point(10, "停損(點)");
+
+var: short_condition(false);			{ 進場做空 }
+
+{ 
+	範例:
+	
+	均線跌破時以市價賣出1張做空
+	以成交價為基礎, 設定固定的停損/停利價格, 觸及時出場
+}
+
+short_condition = Average(Close, 5) cross under Average(Close, 20);
+
+if Position = 0 and short_condition then begin
+	SetPosition(-1, MARKET);		{ 以市價賣出 }
+end;
+
+if Position = -1 and Filled = -1 then begin
+	{ 依照成本價格設定停損/停利: 請注意當作空時, 判斷是否獲利的方向要改變 }
+	
+	if profit_point > 0 and Close <= FilledAvgPrice - profit_point then begin
+		{ 停利 }
+		SetPosition(0);
+	end else if loss_point > 0 and Close >= FilledAvgPrice + loss_point then begin	
+		{ 停損 }
+		SetPosition(0);
+	end;
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="fa7f1348-6379-458f-bf62-10c02475e654" version="1"><Param name="停利(點)" varname="profit_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(點)" varname="loss_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="d0ff35e0-016e-43d0-ba37-2265d4853eaa" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="股價黃金交叉單均線" ID="aa31d08185ce418e81d55552643fdb13" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: length(5,"均線期數");
+variable: avgValue(0);
+
+// 資料讀取筆數設定
+settotalbar(3);
+setbarback(length);
+
+avgValue = Average(close,length);
+
+// 多方進場策略：收盤價黃金交叉均線。出場策略：收盤價死亡交叉均線。
+if close cross above avgValue then setposition(1);
+if close cross below avgValue then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="571eb0df-1260-487d-8145-5bc102979a17" version="1"><Param name="均線期數" varname="length" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="b13bd078-fd40-4cdb-bdf2-ec9ac39fe5b7" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="07-多單加碼" ID="d0692626f5964c3cb6197a5f3da2e7f9" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單加碼
+}
+
+var: long_condition(false);			{ 進場買進作多 }
+var: add_one_condition(false);		{ 多單加碼1張 }
+var: exit_long_condition(false);	{ 多單全部出場 }
+
+{ 
+	範例:
+	
+	多單進場: 均線穿越做多1張(部位最多=1)
+	多單加碼: 如果已經做多, 又連續上漲3筆, 則加碼1張
+	均線跌破時賣出全部
+}
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+add_one_condition = TrueAll(Close > Close[1], 3);	
+exit_long_condition = Average(Close, 5) cross under Average(Close, 20);	
+
+if Position = 0 and long_condition then begin
+	SetPosition(1);					{ 多單1張: 使用預設買進價格 }
+end;
+
+if Position = 1 and add_one_condition then begin
+	SetPosition(2);					{ 加碼1張變成2張 }
+end;
+
+if Position > 0 and exit_long_condition then begin
+	SetPosition(0);					{ 多單全部出場: 把Position調成0, 使用預設賣出價格 }
+end;
+	]]></Code>
+<Arg><![CDATA[<Arg seed="b6fb8ebb-fa9c-4151-909d-12252e0afda1" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="d10a2644-aff3-4e79-8a81-77f722f958ab" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,TrueAll;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="04-網格交易" ID="bb81147aa2794015bf8dcf82ef11e252" ReturnType="0" ExecType="1" Folder="/3-Algo策略委託/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	網格交易: 每當價格跌破一個網格時就買進, 上漲一個網格時則賣出
+	
+	輸入參數:
+
+	- 網格間隔 (grid_gap: 定義網格的間距)
+	- 網格數目 (grid_maxcount: 往上/往下分別設定的網格數目)
+	- 停損點 (stoploss_point: 當價格超過停損點時, 執行停損. 停損點通常布置在最大網格之外)
+	
+	執行邏輯:
+	
+	- 系統啟動時, 以當時的價格為中心點,
+	- 當市價下跌超過一個網格時, 買進1張,
+	- 當市價上漲超過一個網格時, 賣出1張, 也就是低買高賣,
+	- 如果市價上漲/下跌超過最大網格數目時, 就暫停交易,
+	- 如果價格持續上漲/下跌, 當超過停損點的話, 則全部平倉停損 (通常停損點會設定在最大網格數目之外)
+		
+	舉例:
+	
+	- 每格100點
+	- 共3格
+	- 停損點=500
+	
+	如果在10000點時啟動, 那麼
+	
+	- 當價格跌破9900時買進1口, 接下來如果漲回10000時賣出1口, 
+	- 如果沒有漲回10000, 而是繼續跌到9800時, 則再買進1口 (漲回9900時則賣出1口),
+	- 如果持續下跌, 每100點就買進1口, 可是最低就到9700(3格=300點), 再往下跌就不買了,
+	- 如果很不幸的, 一直往下跌, 那麼當跌破9500時(10000-500=停損點), 則全部停損,
+
+	- 同理, 如果價格一開始就往上走, 例如漲到10100點時, 就賣出1口, 如果跌回10000點, 則買進1口,
+	- 如果繼續上漲, 到了10200點時, 再賣出1口 (跌回10100時則買進1口),
+	- 如果很不幸的, 一直往上漲, 那麼當漲到10500時(10000+500=停損點), 則全部停損,
+
+	- 交易邏輯是低買高賣, 預期價格會在區間震盪, 賺取價格在網格之間穿越時的買賣差額	
+
+	Note: 以下程式碼假設商品一開始的部位 = 0
+}
+
+input: grid_gap(20, "每格點數");
+input: grid_maxcount(3, "最多格數");
+input: stoploss_point(100, "停損(點)");
+
+{ 
+	範例:
+	
+	策略一啟動就以當時收盤價為基礎啟動網格交易, 一直跑到停損點觸發為止
+}
+
+var: intrabarpersist grid_started(false);	{ 開始網格交易 }
+var: intrabarpersist grid_base(0);			{ 網格中心點: 如果不是0的話表示已經啟動 }
+var: intrabarpersist grid_current_base(0);	{ 目前的網格中心點: 依照價格移動 }
+var: intrabarpersist grid_current_ord(0);	{ 目前的網格的編號, 正中央=0, 往上=1, 2, 3, 往下=-1,-2,-3}
+var: intrabarpersist grid_buycount(0);		{ 進入網格後的買進數量合計 }
+var: intrabarpersist grid_sellcount(0);		{ 進入網格後的賣出數量合計, 用buycount/sellcount可以估算目前損益(每個買賣賺一個grid) }
+
+if not grid_started and GetInfo("TradeMode") = 1 then begin
+	grid_started = true;
+	grid_base = Close;
+	grid_current_base = Close;
+	grid_current_ord = 0;
+	grid_buycount = 0;
+	grid_sellcount = 0;
+	
+	Print("=>啟動網格中心點:", numtostr(grid_current_base, 0));
+end;
+
+{ 網格交易邏輯 }
+if grid_base <> 0 then begin
+
+	if Close >= grid_base + stoploss_point or Close <= grid_base - stoploss_point then begin
+
+		SetPosition(0, label:="網格:停損出場");	{ 全部平倉, 停止網格交易(TODO:請填入委託價格) }
+		grid_base = 0;							{ 停止網格交易 }
+
+	end else begin
+		{ 
+			比對目前價格與current_grid_base, 看價格是否穿越網格跳過幾格
+			請注意以下的邏輯有處理一次跳過多格的情形 
+		}
+		if Close >= grid_current_base + grid_gap then begin
+			
+			value1 = grid_current_ord + IntPortion((Close - grid_current_base) / grid_gap);
+			if value1 >= grid_maxcount then value1 = grid_maxcount;
+			value1 = value1 - grid_current_ord;		{ 往上移動的格數 }
+			
+			if value1 > 0 then begin
+				{ 往上移動網格 }
+				grid_current_base = grid_current_base + value1 * grid_gap;
+				grid_current_ord = grid_current_ord + value1;
+				grid_sellcount = grid_sellcount + value1;
+				
+				SetPosition(Position - value1, label:="網格:上漲賣出");	{ 賣出 (TODO:請填入委託價格) }
+			end;
+
+		end else if Close <= grid_current_base - grid_gap then begin
+			
+			value1 = grid_current_ord - IntPortion((grid_current_base - Close) / grid_gap);
+			if value1 <= -1 * grid_maxcount then value1 = -1 * grid_maxcount;
+			value1 = grid_current_ord - value1;		{ 往下移動的格數 }
+			
+			if value1 > 0 then begin
+				{ 往下移動網格 }
+				grid_current_base = grid_current_base - value1 * grid_gap;
+				grid_current_ord = grid_current_ord - value1;
+				grid_buycount = grid_buycount + value1;
+
+				SetPosition(Position + value1, label:="網格:下跌買進");	{ 買進 (TODO:請填入委託價格) }
+			end;
+
+		end;
+	end;	
+
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="d35cead4-52c7-4425-846e-517198626a42" version="1"><Param name="每格點數" varname="grid_gap" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="最多格數" varname="grid_maxcount" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(點)" varname="stoploss_point" type="1" subtype="0" value="100" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="42117eb4-e3cc-411a-8040-260a6dc17db1" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="布林通道觸碰下軌" ID="1c2f8bd37fff4a9cba3f0bded44f3f98" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+Input: Length(20, "期數"), UpperBand(2, "通道上緣"), LowerBand(2, "通道下緣");
+variable: mid(0), up(0), down(0);
+
+// 資料讀取筆數設定
+settotalbar(Length + 3);
+
+up = bollingerband(Close, Length, UpperBand);
+down = bollingerband(Close, Length, -1 * LowerBand);
+mid = (up + down) / 2;
+
+// 多方包寧傑通道進場策略：最低價觸碰下軌道。出場策略：最高價觸碰上軌道。
+if low cross under down then setposition(1);
+if high cross over up then setposition(0);		]]></Code>
+<Arg><![CDATA[<Arg seed="1ceb5b04-08f3-4481-95d5-a70d5a77b6ca" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="通道上緣" varname="UpperBand" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="通道下緣" varname="LowerBand" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="5b154746-2e54-449f-a28f-ce3e8641960f" version="1" />]]></Plots>
+<RefFunc>1,BollingerBand;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="08-Alert" ID="06a55d2ecb3b482d9c90037b5064eb75" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	Alert語法
+	
+	在交易腳本內也可以透過Alert語法產生'通知'. 	
+}
+
+var: alert_condition(false);		{ 何時通知 }
+
+if alert_condition then begin
+	{ 呼叫Alert函數, 傳入要通知的訊息 }
+	alert("這是我想要顯示的通知訊息");
+	
+	{ 也可以一次傳入多個參數, 系統會把這些參數串連成一個字串, 用空白字元來分隔 }
+	
+	alert("目前Bar時間=", FormatTime("HH:mm", Time));
+end;
+
+{ 
+	
+	Alert的通知會出現在以下的畫面內
+	
+	a. 自動交易中心, 策略執行記錄內(類別為警示)
+	b. 即時監控畫面(請記得來源要勾選'自動交易')
+	c. 警示提示視窗(請記得來源要勾選'自動交易')
+	
+	如果自動交易策略啟動推播的話, Alert也會傳送到手機端		
+}
+
+
+
+	
+	
+	]]></Code>
+<Arg><![CDATA[<Arg seed="b714135c-f103-4bfd-a012-15f1487cfc8c" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="7c2dc367-5b81-4d60-a6f2-2c4956c6970b" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;11;9;12;10;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="ATR觸發下通道" ID="cb1d8e993f1947429c9af3b4aa65e7de" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input:period(20,"計算TrueRange的區間"),N(2,"N倍通道");
+
+// 資料讀取筆數設定
+settotalbar(period + 3);
+
+value1=average(truerange,period);
+value2=average(close,period);
+value3=value2+N*value1;
+value4=value2-N*value1;
+
+// 空方進場策略：向下跌破下通道。出場策略：向上突破上通道。
+if close crosses below value4 then setposition(-1);		
+if close crosses over value3 then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="ec478865-c569-49ac-8fe5-6a5653dcfd95" version="1"><Param name="計算TrueRange的區間" varname="period" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="N倍通道" varname="N" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="326c1d09-eabe-4d23-a74f-0c4b6817d52e" version="1" />]]></Plots>
+<RefFunc>1,TrueRange;1,Average;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="02-多單固定停利停損(點)" ID="17c1ccb4fc324177ad04691488717f23" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單停損(點)
+}
+
+input: profit_point(10, "停利(點)");
+input: loss_point(10, "停損(點)");
+
+var: long_condition(false);			{ 進場買進作多 }
+
+{ 
+	範例:
+	
+	均線穿越時以市價買進1張
+	以成交價為基礎, 設定固定的停損/停利價格, 觸及時出場
+}
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+
+if Position = 0 and long_condition then begin
+	SetPosition(1, MARKET);		{ 以市價買進 }
+end;
+
+if Position = 1 and Filled = 1 then begin
+	{ 依照成本價格設定停損/停利 }
+	
+	if profit_point > 0 and Close >= FilledAvgPrice + profit_point then begin
+		{ 停利 }
+		SetPosition(0);
+	end else if loss_point > 0 and Close <= FilledAvgPrice - loss_point then begin	
+		{ 停損 }
+		SetPosition(0);
+	end;
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="0be9553b-b164-4757-93c8-e0328f78232a" version="1"><Param name="停利(點)" varname="profit_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(點)" varname="loss_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="c7a8acf2-9441-43da-a197-012ad3e16023" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="平滑CCI超買" ID="67bcd27ca1764395a21ee6be7dd97540" ReturnType="0" ExecType="3" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告變數
+Input: Length(14, "期數"), AvgLength(9, "平滑期數"), OverSold(100, "超買值");
+Variable: cciValue(0), cciMAValue(0);
+
+// 資料讀取筆數設定
+SetTotalBar(maxlist(AvgLength + Length + 1,6) + 11);
+
+cciValue = CommodityChannel(Length);
+cciMAValue = Average(cciValue, AvgLength);
+
+// 空方進場策略：平滑CCI黃金交叉超賣值。出場策略：平滑CCI死亡交叉超賣值。
+if cciMAValue Crosses above OverSold then setposition(-1);
+if cciMAValue Crosses Below OverSold then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="16cff6e5-92be-4d2b-aa50-ec2319bc6918" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="14" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="平滑期數" varname="AvgLength" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="超買值" varname="OverSold" type="1" subtype="0" value="100" isSerial="1" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="2622852f-ea11-454b-8c86-4ee6dabd4299" version="1" />]]></Plots>
+<RefFunc>1,CommodityChannel;1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="01-市價交易" ID="51f1120e5c294a5dadf2e6a6913ce4ff" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	市價交易
+}
+
+var: long_condition(false);			{ 進場買進作多 }
+var: exit_long_condition(false);	{ 多單出場 }
+
+{ 
+	範例:
+	
+	均線穿越時以市價買進1張
+	均線跌破時以市價賣出(1張)
+}
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+exit_long_condition = Average(Close, 5) cross under Average(Close, 20);	
+
+if Position = 0 and long_condition then begin
+	SetPosition(1, MARKET);		{ 以市價買進 }
+end;
+
+if Position = 1 and exit_long_condition then begin
+	SetPosition(0, MARKET);		{ 以市價賣出 }
+end;
+	]]></Code>
+<Arg><![CDATA[<Arg seed="21bd4aaf-ef05-4f1b-b7af-98f34a0af4f2" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="36917c67-4f83-4d18-a192-ed83dbe2c974" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="07-空單移動停損(點)" ID="49d1f5d369124d61953832e0c676aa98" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	空單移動停損(點)
+
+	設定停損點, 跟停利點(如果不設定停利的話請把profit_point設定成0)
+	價格碰觸到停損/停利點時出場
+	如果價格下跌時, 停損點會跟著下跌	
+}
+
+input: profit_point(10, "停利(點)");
+input: loss_point(10, "停損(點)");
+
+var: short_condition(false);		{ 進場做空 }
+
+{ 
+	範例:
+	
+	均線跌破時做空賣出1張
+	以成交價為基礎, 設定固定停利以及移動停損
+}
+
+if loss_point = 0 then raiseruntimeerror("請設定停損(點)");
+
+short_condition = Average(Close, 5) cross under Average(Close, 20);
+
+if Position = 0 and short_condition then begin
+	SetPosition(-1);			{ 做空賣出1張 }
+end;
+
+if Position = -1 and Filled = -1 then begin
+	{ 依照成本價格設定停損/停利 }
+	var: intrabarpersist stoploss_point(0);
+	
+	{ 計算停損價格 }
+	if stoploss_point = 0 then begin
+		stoploss_point = FilledAvgPrice + loss_point;
+	end;
+	
+	{ 如果價格下跌的話, 則往下挪動停損價格. 停損價格只會越來越低 }
+	if Close < FilledAvgPrice then begin
+		if Close + loss_point < stoploss_point then begin
+			stoploss_point = Close + loss_point;
+		end;	
+	end;	
+	
+	if profit_point > 0 and Close <= FilledAvgPrice - profit_point then begin
+		{ 停利 }
+		SetPosition(0);
+		stoploss_point = 0;
+	end else if Close >= stoploss_point then begin
+		{ 停損 }
+		SetPosition(0);
+		stoploss_point = 0;
+	end;
+end;
+	
+	
+	
+]]></Code>
+<Arg><![CDATA[<Arg seed="d78adbd0-99fd-47c7-810b-ac3baf5ce42f" version="1"><Param name="停利(點)" varname="profit_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(點)" varname="loss_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="bc1cd902-6c82-4525-ad46-c2d79258e591" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="DIF-MACD從負翻正" ID="cb31dc102e704bc1b76a289f826e196a" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: FastLength(12, "DIF短期期數"), SlowLength(26, "DIF長期期數"), MACDLength(9, "MACD期數");
+variable: difValue(0), macdValue(0), oscValue(0);
+
+// 資料讀取筆數設定
+SetTotalBar((maxlist(FastLength,SlowLength,6) + MACDLength) * 3 + 8);
+
+MACD(weightedclose(), FastLength, SlowLength, MACDLength, difValue, macdValue, oscValue);
+
+// 多方進場策略：DIF-MACD由負轉正。出場策略：DIF-MACD由正轉負。
+if oscValue Crosses Above 0	then setposition(1);
+if oscValue Crosses below 0	then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="a157a750-a88b-4bc1-a353-abce13cdf7f7" version="1"><Param name="DIF短期期數" varname="FastLength" type="1" subtype="0" value="12" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="DIF長期期數" varname="SlowLength" type="1" subtype="0" value="26" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="MACD期數" varname="MACDLength" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="31ac30ea-cf60-48bc-a52c-a8a6e651549a" version="1" />]]></Plots>
+<RefFunc>1,WeightedClose;1,MACD;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="02-SetPosition範例#3(多單1口+空單1口)" ID="27a64879d1e445d0a09a96b424d4de5c" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	範例
+
+	當發生做多情境時, 把部位變成做多1口(如果此時是空手的話, 買進1口, 如果此時是做空1口的話, 回補這一口,同時買進1口)
+	當發生做空情境時, 把部位變成做空1口(如果此時是空手的話, 賣出1口, 如果此時是做多1口的話, 賣出這一口,同時做空1口)
+	
+	做多後發生出場情境時, 多單出場(變成空手)
+	做空後發生出場情境時, 空單出場(變成空手)
+
+	這個是範例#1跟範例#2的綜合體, 可是包含了部位翻轉的邏輯(Position可能從-1變成1, 或是從1變成-1)
+}
+
+var: 
+	long_condition(false), 			{ 是否做多 }
+	exit_long_condition(false), 	{ 是否多單出場 }
+	short_condition(false), 		{ 是否做空 }
+	exit_short_condition(false);	{ 是否空單出場 }
+
+if Position <> 1 and long_condition then begin
+	{ 如果符合做多情境(long_condition), 則把部位變成1 (可能是0->1 or -1->1) }
+	SetPosition(1);
+
+end else if Position <> -1 and short_condition then begin
+	{ 如果符合做空情境(short_condition), 則把部位變成-1 (可能是0->-1 or 1->1) }
+	SetPosition(-1);
+
+end else if Position = 1 and exit_long_condition then begin
+	{ 如果已經做多, 且發生多方出場情形時(exit_long_condition), 則把部位變成0 }
+	SetPosition(0);
+
+end else if Position = -1 and exit_short_condition then begin
+	{ 如果已經做空, 且發生空方出場情形時(exit_short_condition), 則把部位變成0 }
+	SetPosition(0);
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="84ab7070-586f-494d-9c77-b16b61169af8" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="f3962adb-8795-40f8-bf49-10c2d1066b26" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="10-改價" ID="58b49e70d09842f2afcc017b9d856436" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	修改尚未完全成交的委託的價格
+}
+
+var: long_condition(false);		{ 進場買進作多 }
+var: exit_long_condition(false);{ 多單全部出場 }
+
+{ 
+	範例:
+	
+	均線穿越時以短天期的均線價格買進1張
+	如果等了三根K棒都沒有成交則以目前的市場價格追價
+	均線跌破時多單全部平倉
+}
+
+value1 = Average(Close, 5);
+value2 = Average(Close, 20);
+long_condition = value1 cross over value2;
+exit_long_condition = value1 cross under value2;	
+
+if Position = 0 and long_condition then begin
+	SetPosition(1, value1);		{ 以5日均線的價格買進 }
+end;
+
+if Position = 1 and exit_long_condition then begin
+	SetPosition(0);				{ 多單全部平倉 }
+end else if Position = 1 and TrueAll(Position <> Filled, 3) then begin
+	{ 
+		送出買進委託後, Position = 1, 如果成交了, Filled = 1,
+		Position <> Filled 在這裡則代表著委託已經送出, 可是還沒有成交,
+	
+		Position, Filled, 跟value1, value2, Close一樣, 都是一個"序列",
+		
+		所以Position[1]是上一根K棒最後的Position, Filled[1]是上一根K棒最後的Filled,
+		
+		所以TrueAll(Position <> Filled, 3) 代表著連續三根K棒都沒有成交 			
+	}
+	SetPosition(1, Close);		{ 修改委託價格為目前成交價 }
+end;	
+]]></Code>
+<Arg><![CDATA[<Arg seed="dfaaed89-7970-4f8a-9432-565af716df06" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="dbccd4bb-68eb-460e-9242-e6655b38499d" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder;1,TrueAll</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="02-金額換算" ID="d6fd2c0ba47546a0a97fd205b82f90c6" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	以金額計算交易數量
+}
+
+input: ordersize_w(10, "每筆交易金額(萬)");
+
+{ 
+	範例:
+	
+	均線穿越時以指定金額換算張數買進
+	均線跌破時以市價賣出全部數量
+}
+
+var: long_condition(false);			{ 進場買進作多 }
+var: exit_long_condition(false);	{ 多單出場 }
+
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+exit_long_condition = Average(Close, 5) cross under Average(Close, 20);	
+
+if Position = 0 and long_condition then begin
+	var: order_price(0);		{ 預期委託價格 }
+	var: order_qty(0);			{ 換算後數量 }
+	
+	order_price = AddSpread(Close, 1);	
+	order_qty = (ordersize_w * 10000) / (order_price * 1000);
+								{ 計算出來的數值如果不是整數, 傳入SetPosition時會自動捨去小數位數 }
+								{ 例如 SetPosition(2.5) 執行時會被轉成 SetPosition(2) }
+
+	SetPosition(order_qty, order_price);		{ 以指定價格買入指定數量 }
+end;
+
+if Position <> 0 and exit_long_condition then begin
+	SetPosition(0, MARKET);		{ 以市價賣出全部數量 }
+end;
+]]></Code>
+<Arg><![CDATA[<Arg seed="9ad6e01e-78e8-48d2-8199-19a238f4030c" version="1"><Param name="每筆交易金額(萬)" varname="ordersize_w" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="7a010230-b947-477f-93f6-0318f39987f9" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="RSI低檔價格背離" ID="936bc4179e4b47fa93344a1850412125" ReturnType="0" ExecType="3" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+Input: RSILength(10, "RSI期數"), _LThreshold(20, "低檔值"), _HThreshold(80, "高檔值");
+variable: rsiValue(0),RSI_linearregslope(0),Close_linearregslope(0);
+
+// 資料讀取筆數設定
+settotalbar(maxlist(RSILength,6) * 8 + 8);
+
+if RSILength < 5 then raiseruntimeerror("計算期別請超過五期");
+RSIValue = RSI(Close, RSILength);
+RSI_linearregslope = linearregslope(RSIValue, RSILength);
+Close_linearregslope = linearregslope(Close, RSILength);
+
+// 多方進場策略：RSI由下往上突破低檔區，且價格趨勢背離。出場策略：RSI由上往下穿越高檔區，且價格趨勢背離。
+if RSIValue Crosses Above _LThreshold and RSI_linearregslope > 0 and Close_linearregslope < 0 then setposition(1);
+if RSIValue Crosses Below _HThreshold and RSI_linearregslope < 0 and Close_linearregslope > 0 then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="048e459e-5159-4e5b-b132-16e8b741018b" version="1"><Param name="RSI期數" varname="RSILength" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="低檔值" varname="_LThreshold" type="1" subtype="0" value="20" isSerial="1" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="高檔值" varname="_HThreshold" type="1" subtype="0" value="80" isSerial="1" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="470d206a-d642-4e88-b6a2-a2150ad2c1a5" version="1" />]]></Plots>
+<RefFunc>1,RSI;1,LinearRegSlope;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="05-多單減碼" ID="ab17c3b99ed445ffbcc21fe4cee0b4e9" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單減碼
+}
+
+var: add_one_condition(false);		{ 多單加碼1張 }
+var: reduce_one_condition(false);	{ 多單減碼1張}
+var: exit_long_condition(false);	{ 多單全部出場 }
+
+{ 
+	範例:
+	
+	多單進場: 每次連續上漲3筆時就買進1張(可以買進很多張, 沒有限制)
+	多單減碼: 每次連續下跌3筆時就減碼1張(最多減碼到0)
+	均線跌破時賣出全部
+}
+
+add_one_condition = TrueAll(Close > Close[1], 3);
+reduce_one_condition = TrueAll(Close < Close[1], 3);	
+exit_long_condition = Average(Close, 5) cross under Average(Close, 20);	
+
+if add_one_condition then begin
+	Buy(1);							{ 多單+1: 使用預設買進價格 }
+end;
+
+if Position > 0 then begin
+	{ 請注意: 因為可能同時會符合多單出場以及多單減碼的情形, 所以邏輯上要依照優先順序檢查. }
+	if exit_long_condition then begin
+		SetPosition(0);				{ 多單全部出場: 把Position調成0, 使用預設賣出價格 }
+	end else if reduce_one_condition then begin
+		Sell(1);					{ 多單賣出1張, 使用預設的賣出價格 }
+	end;
+end;
+]]></Code>
+<Arg><![CDATA[<Arg seed="adbdc845-59b8-4749-bea3-b31ef40c426a" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="52221b06-8d13-4895-83a9-7a2c889cebb8" version="1" />]]></Plots>
+<RefFunc>1,TrueAll;1,Average;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="均線黃金交叉" ID="f5bd9f63f716423db4a8dfa2fc99230b" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: Shortlength(5,"短期均線期數"), Longlength(20,"長期均線期數");
+
+// 資料讀取筆數設定
+settotalbar(8);
+setbarback(maxlist(Shortlength,Longlength,6));
+
+// 多方進場策略：短期均線「黃金」交叉長期均線。出場策略：長期均線「死亡」交叉短期均線。
+if Average(Close,Shortlength) Cross Above Average(Close,Longlength) then setposition(1);
+if Average(Close,Shortlength) Cross Below Average(Close,Longlength) then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="6bd479ad-38ab-4be6-87c0-2aa82fa39fcb" version="1"><Param name="短期均線期數" varname="Shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="60486944-7376-41d9-a66b-bb18ed83b1d1" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="8" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="06-空單減碼" ID="1cf1358f7d0f4223bf3a09eec06b1d2d" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	空單減碼
+}
+
+var: short_one_condition(false);	{ 空單加碼1張 }
+var: reduce_one_condition(false);	{ 空單減碼(回補)1張}
+var: exit_short_condition(false);	{ 空單全部回補 }
+
+{ 
+	範例:
+	
+	空單進場: 每次連續下跌3筆時就賣出1張(可以賣出很多張, 沒有限制)
+	空單減碼: 每次連續上漲3筆時就減碼(回補)1張(最多減碼到0)
+	均線穿越時回補全部
+}
+
+short_one_condition = TrueAll(Close < Close[1], 3);
+reduce_one_condition = TrueAll(Close > Close[1], 3);	
+exit_short_condition = Average(Close, 5) cross over Average(Close, 20);	
+
+if short_one_condition then begin
+	Short(1);						{ 空單+1: 使用預設賣出價格 }
+end;
+
+if Position < 0 then begin
+	{ 請注意: 因為可能同時會符合空單出場以及空單減碼的情形, 所以邏輯上要依照優先順序檢查. }
+	if exit_short_condition then begin
+		SetPosition(0);				{ 空單全部出場: 把Position調成0, 使用預設買進價格 }
+	end else if reduce_one_condition then begin
+		Cover(1);					{ 空單回補1張, 使用預設的買進價格 }
+	end;
+end;
+]]></Code>
+<Arg><![CDATA[<Arg seed="3759404e-f6d8-488c-be47-73313adb4e02" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="31a6f2a4-2198-4eaf-9fca-703eef784a02" version="1" />]]></Plots>
+<RefFunc>1,TrueAll;1,Average;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="ATR觸發上通道" ID="0f175ebcffd749f3abfaf9907e333bfd" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input:period(20,"計算TrueRange的區間"),N(2,"N倍通道");
+
+// 資料讀取筆數設定
+settotalbar(period + 3);
+
+value1=average(truerange,period);
+value2=average(close,period);
+value3=value2+N*value1;
+value4=value2-N*value1;
+
+// 多方進場策略：向上突破上通道。出場策略：向下跌破下通道。
+if close crosses over value3 then setposition(1);
+if close crosses below value4 then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="c8d4134f-b84c-47ae-8f22-4615af6f535b" version="1"><Param name="計算TrueRange的區間" varname="period" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="N倍通道" varname="N" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="326c1d09-eabe-4d23-a74f-0c4b6817d52e" version="1" />]]></Plots>
+<RefFunc>1,TrueRange;1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="08-空單加碼" ID="c7168d6d9ecb4b12ab8a5cec926269d2" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單加碼
+}
+
+var: short_condition(false);		{ 做空進場 }
+var: add_one_condition(false);		{ 空單加碼1張 }
+var: exit_short_condition(false);	{ 空單全部出場 }
+
+{ 
+	範例:
+	
+	空單進場: 均線跌破時做空1張(部位最多=-1)
+	空單加碼: 如果已經做空, 又連續下跌3筆, 則加碼1張
+	均線突破時全部回補
+}
+
+short_condition = Average(Close, 5) cross under Average(Close, 20);
+add_one_condition = TrueAll(Close < Close[1], 3);	
+exit_short_condition = Average(Close, 5) cross over Average(Close, 20);	
+
+if Position = 0 and short_condition then begin
+	SetPosition(-1);				{ 空單1張: 使用預設賣出價格 }
+end;
+
+if Position = -1 and add_one_condition then begin
+	SetPosition(-2);				{ 空單加碼1張變成-2 }
+end;
+
+if Position < 0 and exit_short_condition then begin
+	SetPosition(0);					{ 空單全部出場: 把Position調成0, 使用預設買進價格 }
+end;
+	]]></Code>
+<Arg><![CDATA[<Arg seed="dba45b97-69f9-411c-ae31-5b2aa9c21ead" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="7d94d359-da60-45d6-a50e-7150a2c7dcd3" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder;1,TrueAll;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="06-FilledRecord函數" ID="6efe8b0c9b8e4bb58454aaf6ead1fd9b" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	除了Filled跟FilledAvgPirce之外, 系統也提供FilledRecord相關的函數, 讓腳本可以取得每一筆成交的詳細資料
+}
+
+{
+	FilledRecordCount: 取得商品執行迄今的成交筆數
+
+	請注意:
+	
+	成交筆數會對應到真實的交易紀錄, 例如買進5張, 如果分三次成交, 分別成交2張, 2張, 1張, 
+	那麼FilledRecordCount會是3	
+}	
+
+value1 = FilledRecordCount;		{ 回傳成交筆數 }
+
+{
+	取得成交筆數之後, 就可以一筆一筆把成交紀錄資料讀出來
+	
+	FilledRecordDate(n): 回傳第n筆成交紀錄的日期, 格式是YYYYMMDD, 例如20200727 (2020年7月27日)
+	FilledRecordTime(n): 回傳第n筆成交紀錄的時間, 格式是HHMMSS, 例如103000 (10點30分0秒)
+	FilledRecordBS(n):   回傳第n筆成交紀錄的買賣別, 買進的話是1, 賣出的話是-1
+	FilledRecordPrice(n):回傳第n筆成交紀錄的成交價格, 請注意這個數值的正負跟買進/賣出無關(以台股來說都會 > 0)
+	FilledRecordQty(n):  回傳第n筆成交紀錄的成交數量, 請注意不管是買進或是賣出, 這個數值都是 > 0的整數	
+	FilledRecordIsRealtime(n): 回傳第n筆成交紀錄是否是在即時區間成交的, 如果是的話回傳1, 否則回傳0
+
+	n的範圍從1到FilledRecordCount
+}
+
+
+var: idx(0);
+
+for idx = 1 to FilledRecordCount begin
+	value2 = FilledRecordDate(idx);
+	value3 = FilledRecordTime(idx);
+	value4 = FilledRecordBS(idx);
+	value5 = FilledRecordPrice(idx);
+	value6 = FilledRecordQty(idx);	
+	value7 = FilledRecordIsRealtime(idx);
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="c0858e81-177d-44f7-b9ce-36046dcba09e" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="34c736f9-4db4-48ca-ac1b-821626af4f20" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="平滑CCI超賣" ID="d65d6475a0394bf09e6a802083d5c009" ReturnType="0" ExecType="3" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告變數
+Input: Length(14, "期數"), AvgLength(9, "平滑期數"), OverSold(-100, "超賣值");
+Variable: cciValue(0), cciMAValue(0);
+
+// 資料讀取筆數設定
+SetTotalBar(maxlist(AvgLength + Length + 1,6) + 11);
+
+cciValue = CommodityChannel(Length);
+cciMAValue = Average(cciValue, AvgLength);
+
+// 多方進場策略：平滑CCI死亡交叉超賣值。出場策略：平滑CCI黃金交叉超賣值。
+if cciMAValue Crosses Below OverSold then setposition(1);
+if cciMAValue Crosses above OverSold then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="8869f0ea-c90a-4ad7-ab31-bc497568c3c8" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="14" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="平滑期數" varname="AvgLength" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="超賣值" varname="OverSold" type="1" subtype="0" value="-100" isSerial="1" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="c4bfa720-e280-4c4d-a279-b41b977aec7c" version="1" />]]></Plots>
+<RefFunc>1,CommodityChannel;1,Average;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="05-冰山委託單(Iceberg)" ID="fb9bc0a695b94bb78b763b660366eddc" ReturnType="0" ExecType="1" Folder="/3-Algo策略委託/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	冰山單(Iceberg): 把要買進的數量分批低掛
+
+	輸入參數:
+	
+	- 最高價格 (ice_maxprice: 當市價超過這個價格時, 就暫停交易)
+	- 委託價差 (ice_below: 目前市價=X時, 委託價格=X-ice_below(for buying), 也就是低買的價格位置, 目前是定義成絕對值)
+	- 委託方向 (ice_bs: 1=買進, -1=賣出)
+	- 委託總數量 (ice_totalqty: 預期總成交數量)
+	- 每次委託數量 (ice_batchqty: 每一次委託單的大小)
+	
+	執行邏輯(for買進)
+	
+	- 當目前價格 = X時, 如果X <= ice_maxprice, 送出一筆委託單, 價格 = X - ice_below, 數量 = ice_batchqty,
+	- 如果成交的話, 依照目前的價格送出下一筆委託單,
+	- 如果目前的價格Y >= X + 2 * ice_below, and Y <= ice_maxprice, 則取消剩餘委託, 用目前的市場價格重新送出
+	- Buy the dip => 低接
+
+	Note: 以下程式碼假設商品一開始的部位 = 0
+}
+
+input: ice_maxprice(14000, "最高價格");
+input: ice_below(10, "委託單價差");
+input: ice_bs(1, "買賣方向", inputKind:=Dict(["買進", 1], ["賣出", -1]));
+input: ice_totalqty(100, "總委託數量");
+input: ice_batchqty(10, "每次委託數量");
+
+var: intrabarpersist ice_lastorderprice(0);		// 最後一次委託價格
+var: intrabarpersist ice_started(false);		// 已經啟動Iceberg交易
+
+if not ice_started and GetInfo("TradeMode") = 1 then begin
+	ice_started = true;
+	ice_lastorderprice = 0;
+end;
+
+{ 冰山交易邏輯 }
+if ice_started and Filled <> ice_bs * ice_totalqty then begin
+
+	{ 如果目前市場價格超過最大值, 則不處理. 已經送出的委託就維持不動 }
+	if (ice_bs = 1 and Close > ice_maxprice) or 
+	   (ice_bs = -1 and Close < ice_maxprice) then 
+	   return;
+
+	if Position = 0 then begin
+		{ 送出第一次委託 }
+		ice_lastorderprice = Close - ice_bs * ice_below;
+		SetPosition(ice_bs * ice_batchqty, ice_lastorderprice);
+	end else if Position = Filled then begin
+		{ 送出下一批次委託 }
+		ice_lastorderprice = Close - ice_bs * ice_below;
+		SetPosition(Position + ice_bs * ice_batchqty, ice_lastorderprice);
+	end else if ice_bs = 1 and Close > ice_lastorderprice + 2 * ice_below then begin
+		{ 價格移動, 追價 }
+		ice_lastorderprice = Close - ice_bs * ice_below;
+		SetPosition(Position, ice_lastorderprice);
+	end else if ice_bs = -1 and Close < ice_lastorderprice - 2 * ice_below then begin
+		{ 價格移動, 追價 }
+		ice_lastorderprice = Close - ice_bs * ice_below;
+		SetPosition(Position, ice_lastorderprice);
+	end;
+
+end;
+ 
+
+	
+
+ 
+	
+
+
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="499161a9-79b3-4365-8831-4c38e1661c46" version="1"><Param name="最高價格" varname="ice_maxprice" type="1" subtype="0" value="14000" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="委託單價差" varname="ice_below" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="買賣方向" varname="ice_bs" type="1" subtype="0" value="1" isSerial="0" isArray="0" isRef="0" inputkind="1" quickedit="0" keytype="3"><Pair key="買進" value="1" /><Pair key="賣出" value="-1" /></Param><Param name="總委託數量" varname="ice_totalqty" type="1" subtype="0" value="100" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="每次委託數量" varname="ice_batchqty" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="c771035f-ea95-4202-9749-fda2f332e115" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="02-SetPosition範例#2(空單1口)" ID="150899b2dedc47b08079ee2d7495aab6" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	範例: 
+	
+	當發生做空情境時, 賣出1口(做空)
+	做空後發生出場情境時, 空單出場(變成空手)
+}
+
+var: 
+	short_condition(false), 		{ 是否做空 }
+	exit_short_condition(false);	{ 是否空單出場 }
+
+{ 
+	Position=0時判斷是否要做空, 
+	Position=-1時判斷是否要回補 
+}
+if Position = 0 and short_condition then SetPosition(-1);
+if Position = -1 and exit_short_condition then SetPosition(0);
+
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="f59cb8cc-b164-4f34-8837-f5f2f71e67f6" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="d12c34ae-e1c7-43ec-920d-d266fbc5f6da" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="股價死亡交叉單均線" ID="f9713b0c1fd6436e9bf1fbf6163cdfdf" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: length(5,"均線期數");
+variable: avgValue(0);
+
+// 資料讀取筆數設定
+settotalbar(3);
+setbarback(length);
+
+avgValue = Average(close,length);
+
+// 空方進場策略：收盤價死亡交叉均線。出場策略：收盤價黃金交叉均線。
+if close cross below avgValue then setposition(-1);
+if close cross above avgValue then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="7db8de3f-c5a2-48e8-8776-217e309fd627" version="1"><Param name="均線期數" varname="length" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="331fba71-87c0-4c88-b8c6-ce5e39b52395" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="短期RSI死亡交叉長期RSI" ID="6d7200cd8b3e437caeed065367244a8d" ReturnType="0" ExecType="3" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: ShortLength(6, "短期期數"), LongLength(12, "長期期數");
+var:RSI_Short(0), RSI_Long(0);
+
+// 設定資料讀取筆數
+settotalbar(maxlist(ShortLength,LongLength,6) * 8 + 8);
+
+RSI_Short=RSI(Close, ShortLength);
+RSI_Long=RSI(Close, LongLength);
+
+// 空方進場策略：短期RSI死亡交叉長期RSI；出場策略：短期RSI黃金交叉長期RSI
+if RSI_Short Crosses below RSI_Long then setposition(-1);
+if RSI_Short Crosses above RSI_Long then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="6be7bf41-df61-4fa1-a34c-7080f38e5a47" version="1"><Param name="短期期數" varname="ShortLength" type="1" subtype="0" value="6" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期期數" varname="LongLength" type="1" subtype="0" value="12" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="fda73e17-8015-4661-a6a1-ef6b54ff5bd7" version="1" />]]></Plots>
+<RefFunc>1,RSI;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="DIF死亡交叉MACD" ID="e3d8824253184807a79f194effde5aff" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 需告參數
+input: FastLength(12, "DIF短期期數"), SlowLength(26, "DIF長期期數"), MACDLength(9, "MACD期數");
+variable: difValue(0), macdValue(0), oscValue(0);
+
+// 資料讀取筆數設定
+SetTotalBar((maxlist(FastLength,SlowLength,6) + MACDLength) * 3 + 8);
+
+MACD(weightedclose(), FastLength, SlowLength, MACDLength, difValue, macdValue, oscValue);
+
+// 空方進場策略：DIF死亡交叉MACD；出場策略：DIF黃金交叉MACD
+if difValue Crosses below macdValue then setposition(-1);
+if difValue Crosses Above macdValue then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="ec809127-8414-4468-bb59-a68cd7486f8d" version="1"><Param name="DIF短期期數" varname="FastLength" type="1" subtype="0" value="12" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="DIF長期期數" varname="SlowLength" type="1" subtype="0" value="26" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="MACD期數" varname="MACDLength" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="31827e9f-ecd9-470f-9bd7-ff587b6dab38" version="1" />]]></Plots>
+<RefFunc>1,WeightedClose;1,MACD;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="帶量黃金交叉均線" ID="ce6c70ffe33246168102856c891346d8" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: Length(10, "期數"), VolFactor(2, "成交量放大倍數");
+var: avgP(0), avgVol(0);
+
+// 設定資料讀取筆數
+settotalbar(3);
+setbarback(Length);
+
+avgP = Average(close, Length);
+avgVol = Average(volume, Length);
+
+// 多方進場策略：帶量黃金交叉均線；出場策略：帶量死亡交叉均線。
+if close cross above avgP and volume > avgVol * VolFactor then setposition(1);
+if close cross below avgP and volume > avgVol * VolFactor then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="ef3b8cbe-7f66-4715-b54e-de5a62847ae8" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="成交量放大倍數" varname="VolFactor" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="fe2e96c2-fd4e-4dd9-a51a-7f4343da6837" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;11;9;12;10;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="06-多單移動停損(點)" ID="1fc8c0c9e6274d669ae9a4e7dcc18a55" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單移動停損(點)
+
+	設定停損點, 跟停利點(如果不設定停利的話請把profit_point設定成0)
+	價格碰觸到停損/停利點時出場
+	如果價格上漲時, 停損點會跟著上漲	
+}
+
+input: profit_point(10, "停利(點)");
+input: loss_point(10, "停損(點)");
+
+var: long_condition(false);			{ 進場買進作多 }
+
+{ 
+	範例:
+	
+	均線穿越時買進1張
+	以成交價為基礎, 設定固定停利以及移動停損
+}
+
+if loss_point = 0 then raiseruntimeerror("請設定停損(點)");
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+
+if Position = 0 and long_condition then begin
+	SetPosition(1);				{ 買進1張 }
+end;
+
+if Position = 1 and Filled = 1 then begin
+	{ 依照成本價格設定停損/停利 }
+	var: intrabarpersist stoploss_point(0);
+	
+	{ 計算停損價格 }
+	if stoploss_point = 0 then begin
+		stoploss_point = FilledAvgPrice - loss_point;
+	end;
+	
+	{ 如果價格上漲的話, 則往上挪動停損價格. 停損價格只會越來越高 }
+	if Close > FilledAvgPrice then begin
+		if Close - loss_point > stoploss_point then begin
+			stoploss_point = Close - loss_point;
+		end;	
+	end;	
+	
+	if profit_point > 0 and Close >= FilledAvgPrice + profit_point then begin
+		{ 停利 }
+		SetPosition(0);
+		stoploss_point = 0;
+	end else if Close <= stoploss_point then begin
+		{ 停損 }
+		SetPosition(0);
+		stoploss_point = 0;
+	end;
+end;
+	
+	
+	
+]]></Code>
+<Arg><![CDATA[<Arg seed="f9294b49-f688-42fa-a2b6-ffcb3d511b15" version="1"><Param name="停利(點)" varname="profit_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(點)" varname="loss_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="d50bc184-f26a-4a16-83d6-ff541759f667" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="05-FilledAvgPrice以及停損停利範例" ID="0ac319963f934ce8b9907d5e7cba7391" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	除了可以使用Filled來知道目前的成交部位之外, 
+	也可以透過FilledAvgPrice這個函數來取得目前"未平倉"部位的成本	
+}
+
+{
+	範例: 多單1口進場後, +1.5%停利, -1.5%停損
+}
+
+var: 
+	long_condition(false); 		{ 是否做多 }
+
+
+if Position = 0 and long_condition then SetPosition(1);
+
+if Position = 1 and Filled = 1 then begin		
+	{ 多單已經買進1口 }
+
+	{ 計算損益% }
+	var: plratio(0);
+
+	{ 
+		請注意: 不管Filled是大於0還是小於0, FilledAvgPrice的數值都是'正數'(>0) 
+	}
+	plratio = 100 * (Close - FilledAvgPrice) / FilledAvgPrice;
+	
+	if plratio >= 1.5 then SetPosition(0);		{ 停利 }
+	if plratio <= -1.5 then SetPosition(0);		{ 停損 }
+end;	
+
+{
+	目前計算未平倉成本的方式是採用**先進先出的沖銷方式**來計算, 以下是沖銷順序的範例:
+	
+	範例#1
+	
+	假設策略執行過程總共產生三筆成交, 依照時間先後順序, 資料分別為
+	
+	- 第一筆: 買進1張, 成交價100元,
+	- 第二筆: 買進1張, 成交價102元,
+	- 第三筆: 賣出1張, 成交價101元
+	
+	在第一筆成交時, Filled = 1, FilledAvgPrice = 100
+	在第二筆成交時, Filled = 2, FilledAvgPrice = (100 + 102) / 2 = 101
+	在第三筆成交時, Filled = 1, FilledAvgPrice = 102 (第三筆-1沖銷第一筆+1, 所以未平倉剩下第二筆1張, 未平倉成本=102)
+	
+	
+	範例#2
+	
+	假設策略執行過程總共產生四筆成交, 依照時間先後順序, 資料分別為
+	
+	- 第一筆: 買進2張, 成交價100元,
+	- 第二筆: 買進2張, 成交價101元,
+	- 第三筆: 買進2張, 成交價102元,
+	- 第四筆: 賣出3張, 成交價101元,
+	
+	在第一筆成交時, Filled = 2, FilledAvgPrice = 100
+	在第二筆成交時, Filled = 4, FilledAvgPrice = (100*2 + 101*2) / 4 = 100.5
+	在第三筆成交時, Filled = 6, FilledAvgPrice = (100*2 + 101*2 + 102*2) / 6 = 101
+	在第四筆成交時, Filled = 3, FilledAvgPrice = (101*1 + 102 * 2) / 3 = 101.66666
+	(第一筆成交的2張被沖銷, 第二筆成交的1張被沖銷)
+
+}
+	
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="f3959b80-ae59-44d6-a86d-bcbb78da77bd" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="430b1cbd-3b9c-4fd7-88b7-93edbb41aea0" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="07-Position跟Filled的異動時機點" ID="7e74da2009724134b261e23498a4859b" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	系統在什麼時候會更新Position以及Filled ?
+
+	系統洗價(執行腳本)的邏輯如下:
+	
+	- 當成交價異動時(逐筆洗價)或是K棒完成時(非逐筆洗價)執行腳本,
+	
+	- 要執行腳本前, 先決定當時的Position以及Filled的數值,
+	
+	- 執行腳本的邏輯,
+	
+	- 如果執行時腳本呼叫SetPosition的話, 則紀錄"第一次"呼叫SetPosition的狀態,
+	
+	- 接下來腳本如果又呼叫其他的SetPosition的話, 則[不予理會], 也就是說洗價過程內如果腳本呼叫了
+	  很多個SetPosition的話, 系統只會執行第一個,
+	  
+	- 在洗價過程內, Position跟Filled的數值都會維持不變, 就算洗價到一半時突然收到成交的話, Filled也不會更動(不然的話腳本的計算
+      邏輯可能會因為Filled的異動而亂掉)	
+	
+	- 等到腳本洗價完畢, 依照委託/執行的狀態, 決定要如何送單,
+	
+	- 同時也會更新Position的數值(所以下一次洗價時Position的數值會異動)
+	
+	- 如果在下一次洗價前收到任何成交的話, 也會更新Filled的數值(所以下一次洗價時Filled的數值會是洗價前的成交狀態)	
+}
+
+{
+	範例#1: 說明多個SetPosition時的執行邏輯, 以及Position何時異動
+}
+
+if currentbar = 1 then begin
+	print(Position);			{ 印出 0 }
+	SetPosition(1);				{ 這是第一次呼叫的SetPosition(), 系統會執行這一個 }
+	print(Position);			{ 印出 0, 要等到下一次洗價時Position才會變成1 }
+	SetPosition(2);				{ 這次呼叫會被忽略, 因為line#33已經呼叫了SetPosition() }
+	print(Position);			{ 印出 0, 要等到下一次洗價時Position才會變成1 }
+end else if currentbar = 2 then begin
+	print(Position);			{ 印出 1, 因為currentbar=1的時候執行了line#33的SetPosition(1) }
+	SetPosition(2);				{ 這是這一次洗價第一次呼叫的SetPosition(), 系統會執行這一個 }
+	print(Position);			{ 印出 1, 要等到下一次洗價時Position才會變成2 }
+end;
+
+{
+	範例#2: 因為每一次洗價只會執行一個SetPosition, 所以如果系統希望可以依照不同情境決定部位的數量, 那該怎麼設計 ? 
+}
+
+var: long_condition(false), strong_condition(false);
+
+{ 
+	如果long_condition成立時買1張, 
+	如果strong_condition成立時就買2張
+}
+
+// 寫法#1 => 有問題!! 如果long_condition跟strong_condition都成立時, 只會買1張
+//
+if long_condition then SetPosition(1);
+if strong_condition then SetPosition(2);
+
+// 寫法#2 => OK, 因為會先判斷strong_condition(買比較多的先判斷, 設計時要小心先後順序)
+//
+if strong_condition then SetPosition(2);
+if long_condition then SetPosition(1);
+
+// 寫法#3 => OK(推薦) 依照不同情形計算預期部位, 最後再一次呼叫SetPosition
+//
+if long_condition then value1 = 1;
+if strong_condition then value1 = 2;
+
+if value1 <> 0 then SetPosition(value1);
+
+
+
+	
+	
+
+
+
+	
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="6a06bd14-be7b-45e3-8cc5-d053585dff87" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="f62b1802-8543-4de0-aad6-9cd58dee760d" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="03-全部賣出" ID="381c0f585b0c400b878744e157c88d45" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單全部賣出
+}
+
+var: long_condition(false);			{ 進場買進作多 }
+var: exit_long_condition(false);	{ 多單全部出場 }
+
+{ 
+	範例:
+	
+	多單進場: 每次遇到均線穿越或是連續上漲3筆時就買進1張(可以買進很多張, 沒有限制)
+	均線跌破時賣出全部
+}
+
+long_condition = 
+	Average(Close, 5) cross over Average(Close, 20) or
+	TrueAll(Close > Close[1], 3);
+	
+exit_long_condition = Average(Close, 5) cross under Average(Close, 20);	
+
+if long_condition then begin
+	SetPosition(Position + 1);		{ 多單+1: 使用預設買進價格 }
+									{ SetPosition(Position+1)的意思就是比目前部位多買1筆 }
+									{ 也可以使用 Buy(1), 代表多單加碼1張 }
+end;
+
+if Position > 0 and exit_long_condition then begin
+	SetPosition(0);					{ 多單全部出場: 把Position調成0, 使用預設賣出價格 }
+end;
+	]]></Code>
+<Arg><![CDATA[<Arg seed="97b26f77-c09a-4913-9fb4-5c50bbb3a711" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="ad4c3d5d-5cd5-4bf0-8c04-8a3be962a124" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,TrueAll;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="MTM黃金交叉0" ID="47dcacbbbb414bfaac32b9e50356ffdd" ReturnType="0" ExecType="3" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+Input: Length(10, "期數");
+
+// 資料讀取筆數設定
+settotalbar(maxlist(Length,6) + 8);
+
+// 多方進場策略：MTM黃金交叉0軸；出場策略：MTM死亡交叉0軸
+if Momentum(Close, Length) Crosses Above 0 then setposition(1); 
+if Momentum(Close, Length) Crosses below 0 then setposition(0); ]]></Code>
+<Arg><![CDATA[<Arg seed="78294447-a9c5-41e9-a90c-1889b45c1170" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="3895b939-9a34-4090-a29f-8fe9e3eb376a" version="1" />]]></Plots>
+<RefFunc>1,Momentum;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="DIF-MACD從正翻負" ID="6c7d0f7336bf408bbc9617837ad1a137" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: FastLength(12, "DIF短期期數"), SlowLength(26, "DIF長期期數"), MACDLength(9, "MACD期數");
+variable: difValue(0), macdValue(0), oscValue(0);
+
+// 資料讀取筆數設定
+SetTotalBar((maxlist(FastLength,SlowLength,6) + MACDLength) * 3 + 8);
+
+MACD(weightedclose(), FastLength, SlowLength, MACDLength, difValue, macdValue, oscValue);
+
+// 空方進場策略：DIF-MACD由正轉負。出場策略：DIF-MACD由負轉正。
+if oscValue Crosses below 0	then setposition(-1);		
+if oscValue Crosses Above 0	then setposition(0);		]]></Code>
+<Arg><![CDATA[<Arg seed="a10ba123-817f-4f1c-bf6c-1b1614238156" version="1"><Param name="DIF短期期數" varname="FastLength" type="1" subtype="0" value="12" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="DIF長期期數" varname="SlowLength" type="1" subtype="0" value="26" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="MACD期數" varname="MACDLength" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="31ac30ea-cf60-48bc-a52c-a8a6e651549a" version="1" />]]></Plots>
+<RefFunc>1,WeightedClose;1,MACD;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="股價死亡交叉雙均線" ID="ab122a3cd3164be693ff654f87d735c8" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: shortlength(5,"短期均線期數"), Longlength(20,"長期均線期數");
+variable: Longaverage(0), shortaverage(0);
+
+// 資料讀取筆數設定
+settotalbar(3);
+setbarback(maxlist(shortlength,Longlength));
+
+Longaverage = Average(close,Longlength);
+shortaverage= Average(close,shortlength);
+
+// 空方進場策略：收盤價死亡交叉雙均線。出場策略：收盤價黃金交叉雙均線。
+if close cross below minlist(shortaverage, longaverage) then setposition(-1);
+if close cross above maxlist(shortaverage, longaverage) then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="2b6ab87e-91eb-49af-9623-b6e33f39d89c" version="1"><Param name="短期均線期數" varname="shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="5c3b4db4-c862-4d01-8589-3d5c9550ffd8" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="01-收盤前平倉" ID="e9aa4685206b4dc685077ef11e78747f" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	收盤前平倉
+}
+
+input: exit_period(2, "收盤前N分鐘平倉");
+
+var: long_condition(false);			{ 進場買進作多 }
+var: exit_long_condition(false);	{ 多單出場 }
+var: market_close_condition(false); { 是否已經進入收盤階段 }
+
+{ 
+	範例:
+	
+	均線穿越時買進1張
+	均線跌破時賣出
+	進場後如果連續下跌3筆時賣出
+	收盤前N分鐘如果還有部位的話賣出(當日部位一定歸0)
+}
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+exit_long_condition = Average(Close, 5) cross under Average(Close, 20);	
+
+{ 判斷是否已經進入收盤階段 }
+market_close_condition = EnterMarketCloseTime(exit_period);
+
+if Position = 0 and long_condition and not market_close_condition then begin
+	SetPosition(1);				{ 買進1張: 請注意如果接近收盤時間, 則不進場 }
+end else if Position = 1 and exit_long_condition then begin
+	SetPosition(0);				{ 出場 }
+end else if Position = 1 and market_close_condition then begin
+	SetPosition(0);				{ 進入收盤階段: 出場 }
+end;
+]]></Code>
+<Arg><![CDATA[<Arg seed="269da8fc-e05a-498a-a618-cdce01be6bde" version="1"><Param name="收盤前N分鐘平倉" varname="exit_period" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="964d371b-8b4a-4eb8-8e39-b240346037b0" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder;1,EnterMarketCloseTime</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="MTM死亡交叉0" ID="78bd0a38b9e74c44956f5d758bda53b6" ReturnType="0" ExecType="3" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+Input: Length(10, "期數");
+
+// 資料讀取筆數設定
+settotalbar(maxlist(Length,6) + 8);
+
+// 空方進場策略：MTM死亡交叉0軸；出場策略：MTM黃金交叉0軸
+if Momentum(Close, Length) Crosses below 0 then setposition(-1); 
+if Momentum(Close, Length) Crosses Above 0 then setposition(0); ]]></Code>
+<Arg><![CDATA[<Arg seed="7c5f460e-20ac-42b4-8602-a5fb89748144" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="0ae9463c-81bb-44c7-a3f3-a78d2ce27c04" version="1" />]]></Plots>
+<RefFunc>1,Momentum;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="04-SetPosition範例#5(加碼)" ID="393b09f404484cecb4548f12ff161d22" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	範例: 透過Filled來判斷是否要加碼
+	
+	當發生做多情境時, 買進1口
+	買進成交後, 如果發生加碼情境時, 再買進1口,
+	如果發生出場情境時, 多單出場(變成空手, 部位=0)
+}
+
+var: 
+	long_condition(false), 			{ 是否做多 }
+	raise_long_condition(false),	{ 是否多單加碼 }
+	exit_long_condition(false); 	{ 是否多單出場 }
+
+
+if Position = 0 and long_condition then begin
+	{ 目前Position=0, 而且發生做多情境, 買進1口 }
+	SetPosition(1);
+	
+end else if Position <> 0 and exit_long_condition then begin
+	{ 已經買進, 而且發生多單出場情境, 賣出所有部位 }
+	{ 請注意, Position可能是1 or 2, 所以用 <> 0 來判斷 }
+	SetPosition(0);
+	
+end else if Position = 1 and Filled = 1 and raise_long_condition then begin
+	{ 已經買進1口, 而且也成交了, 此時發生加碼情境, 所以再買進1口}
+	
+	SetPosition(2);
+	
+	{ 也可以寫成 SetPosition(position + 1) }
+end;
+	
+]]></Code>
+<Arg><![CDATA[<Arg seed="8defe3b9-8f99-45f2-b0ed-88022b18676c" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="8c9d8e46-65eb-4cb1-b829-d34a500376d2" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="股價死亡交叉三均線" ID="99bffeebcca24917ae3ced18f00ed4ee" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: shortlength(5,"短期均線期數"), midlength(10,"中期均線期數"), Longlength(20,"長期均線期數");
+variable: shortaverage(0), midaverage(0), Longaverage(0);
+
+// 資料讀取筆數設定
+settotalbar(3);
+setbarback(maxlist(shortlength,midlength,Longlength));
+
+shortaverage=Average(close,shortlength);
+midaverage=Average(close,midlength) ;
+Longaverage=Average(close,Longlength); 
+
+// 空方進場策略：收盤價死亡交叉三均線。出場策略：收盤價黃金交叉三均線。
+if close cross below minlist(shortaverage, midaverage, longaverage) then setposition(-1);
+if close cross above maxlist(shortaverage, midaverage, longaverage) then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="1391b6b7-c937-43e3-a7eb-26eb7602e06e" version="1"><Param name="短期均線期數" varname="shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="中期均線期數" varname="midlength" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="90e76b92-62e5-424f-93f5-3fbe556f52aa" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="布林通道觸碰上軌" ID="4e4dc7c29a1a4358b34f14a6ea46aac0" ReturnType="0" ExecType="1" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+Input: Length(20, "期數"), UpperBand(2, "通道上緣"), LowerBand(2, "通道下緣");
+variable: mid(0), up(0), down(0);
+
+// 資料讀取筆數設定
+settotalbar(Length + 3);
+
+up = bollingerband(Close, Length, UpperBand);
+down = bollingerband(Close, Length, -1 * LowerBand);
+mid = (up + down) / 2;
+
+// 空方包寧傑通道進場策略：最高價觸碰上軌道。出場策略：最低價觸碰下軌道。
+if high cross over up then setposition(-1);
+if low cross under down then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="23102565-44b3-4ee5-9721-fe14e77543ca" version="1"><Param name="期數" varname="Length" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="通道上緣" varname="UpperBand" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="通道下緣" varname="LowerBand" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="5b154746-2e54-449f-a28f-ce3e8641960f" version="1" />]]></Plots>
+<RefFunc>1,BollingerBand;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="09-空單移動停利(點)" ID="15df2acec32842b8a509a8edaa461dd6" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	空單移動停利(點)
+
+	設定停損點(如果不設定的話, 請把loss_point設定成0), 以及停利點, 跟回跌點數
+	價格上漲到停損時出場
+	價格下跌停利點後啟動移動停利, 如果價格繼續下跌, 則繼續持有, 如果價格回檔超過回跌點數時, 則停利出場
+}
+
+input: profit_point(10, "停利(點)");
+input: profit_drawback_point(5, "停利回跌(點)");
+input: loss_point(10, "停損(點)");
+
+var: short_condition(false);		{ 進場買空 }
+
+{ 
+	範例:
+	
+	均線跌破時做空賣出1張
+	以成交價為基礎, 設定固定停損以及移動停利
+}
+
+if profit_point = 0 then raiseruntimeerror("請設定停利(點)");
+if profit_drawback_point = 0 then raiseruntimeerror("請設定停利回跌(點)");
+if profit_drawback_point > profit_point then raiseruntimeerror("停利(點)需大於停利回跌(點)");
+
+short_condition = Average(Close, 5) cross under Average(Close, 20);
+
+if Position = 0 and short_condition then begin
+	SetPosition(-1);			{ 做空賣出1張 }
+end;
+
+if Position = -1 and Filled = -1 then begin
+	var: intrabarpersist max_profit_point(0);	{ 啟動停利後最大獲利點 }
+
+	if loss_point > 0 and Close >= FilledAvgPrice + loss_point then begin
+		{ 停損 }
+		SetPosition(0);
+		max_profit_point = 0;
+
+	end else begin
+	
+		{ 判斷是否要啟動停利 }
+		if max_profit_point = 0 and Close <= FilledAvgPrice - profit_point then begin
+			max_profit_point = Close;
+		end;
+		
+		if max_profit_point <> 0 then begin		
+			if Close >= max_profit_point + profit_drawback_point then begin
+				{ 停利 }
+				SetPosition(0);
+				max_profit_point = 0;
+			end else if Close < max_profit_point then begin
+				{ 移動最大獲利點 }
+				max_profit_point = Close;
+			end;	
+		end;		
+	end;
+
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="48110897-8f59-4385-9713-12d6740356a8" version="1"><Param name="停利(點)" varname="profit_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停利回跌(點)" varname="profit_drawback_point" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(點)" varname="loss_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="aba9e47d-07a1-4e80-b027-686cd71c878b" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="03-Filled" ID="cb19946003b343e298969c12d285283e" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+    Filled是Position的另外一個朋友, 代表這個策略內/這個執行商品的成交部位
+    
+    假設剛開始執行時, 腳本的Position是0的話, 此時Filled也會是0
+
+    接下來當腳本執行SetPosition(1)後, 會送出一筆買進1張的委託
+
+    如果此時尚未成交的話, Position會等於1, 可是Filled會等於0
+    如果這一筆委託單成交的話, 則Position會等於1, Filled也會等於1    
+    
+    如果腳本內想要判斷目前成交狀態的話, 就可以透過讀取Filled這個變數來判斷.
+}
+
+{ 以下假設策略啟動時商品的Postion = 0 }
+
+if Position = 1 and Filled = 0 then begin
+    { 已經送出一筆買進1張的委託, 可是還沒有成交}
+
+end;
+
+if Position = 1 and Filled = 1 then begin
+    { 已經送出一筆買進1張的委託, 而且這一筆委託已經成交 }
+
+end;
+
+if Position = -1 and Filled = 0 then begin
+    { 已經送出一筆賣出1張的委託, 可是還沒有成交 }
+
+end;
+
+if Position = -1 and Filled = -1 then begin
+    { 已經送出一筆賣出1張的委託, 而且這一筆委託已經成交 }
+    
+    { Filled跟Position一樣, 可能會大於0, 也可能會小於0 }
+end;
+
+
+
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="020109e5-7a2a-4a04-b929-7e63f9523e1e" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="9cdf0f77-4055-4a03-a915-a9900fb755f1" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="09-刪單" ID="df1968d5c6df4ec8993db7ea0ca489a9" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	刪除尚未完全成交的委託
+}
+
+var: long_condition(false);		{ 進場買進作多 }
+var: exit_long_condition(false);{ 多單全部出場 }
+
+{ 
+	範例:
+	
+	均線穿越時以長天期的均線價格買進1張
+	如果等了三根K棒都沒有成交則取消委託
+	均線跌破時多單全部平倉
+}
+
+value1 = Average(Close, 5);
+value2 = Average(Close, 20);
+long_condition = value1 cross over value2;
+exit_long_condition = value1 cross under value2;	
+
+if Position = 0 and long_condition then begin
+	SetPosition(1, value2);		{ 以20日均線的價格買進 }
+end;
+
+if Position = 1 and exit_long_condition then begin
+	SetPosition(0);				{ 多單全部平倉 }
+end else if Position = 1 and TrueAll(Position <> Filled, 3) then begin
+	{ 
+		送出買進委託後, Position = 1, 如果成交了, Filled = 1,
+		Position <> Filled 在這裡則代表著委託已經送出, 可是還沒有成交,
+	
+		Position, Filled, 跟value1, value2, Close一樣, 都是一個"序列",
+		
+		所以Position[1]是上一根K棒最後的Position, Filled[1]是上一根K棒最後的Filled,
+		
+		所以TrueAll(Position <> Filled, 3) 代表著連續三根K棒都沒有成交 			
+	}
+	SetPosition(0);				{ 取消買進的委託 }
+end;	
+]]></Code>
+<Arg><![CDATA[<Arg seed="828109a4-f493-4405-9ae3-9d5702d98bd7" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="18ccd390-a173-470d-9359-194fc6cb65d9" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder;1,TrueAll</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="04-全部回補" ID="fa182a0a4edc4c49b6f64f1a153abb7b" ReturnType="0" ExecType="1" Folder="/1-常用下單方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	空單全部回補
+}
+
+var: short_condition(false);		{ 進場賣出做空 }
+var: exit_short_condition(false);	{ 空單全部回補 }
+
+{ 
+	範例:
+	
+	空單做空: 每次遇到均線跌破或是連續下跌3筆時就賣出1張(可以做空很多張, 沒有限制)
+	均線穿越時回補全部空單
+}
+
+short_condition = 
+	Average(Close, 5) cross under Average(Close, 20) or
+	TrueAll(Close < Close[1], 3);
+	
+exit_short_condition = Average(Close, 5) cross over Average(Close, 20);	
+
+if short_condition then begin
+	SetPosition(Position - 1);		{ 空單+1: 使用預設賣出價格 }
+									{ SetPosition(Position-1)的意思就是比目前部位多賣1筆 }
+									{ 也可以使用Short(1), 代表空單加碼1張 }
+	
+end;
+
+if Position < 0 and exit_short_condition then begin
+	SetPosition(0);					{ 空單全部回補: 把Position調成0, 使用預設買進價格 }
+end;
+	]]></Code>
+<Arg><![CDATA[<Arg seed="f85b6e9e-7fdc-4b69-9066-e4052cc998e8" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="03316dfb-dbb1-4e1a-9ad2-6f2ef6dfffd8" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder;1,TrueAll;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="KD低檔死亡交叉" ID="248029941d99405f8679a6c9566ebe5c" ReturnType="0" ExecType="3" Folder="/常見技術分析/空頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: Length(9, "計算期數"), RSVt(3, "RSVt權數"), Kt(3, "Kt權數"), LowBound(25, "低檔區"), HighBound(75, "高檔區");
+variable: _rsv(0), _k(0), _d(0);
+
+// 資料讀取筆數設定
+SetTotalBar(maxlist(Length,6) * 3 + 8);
+
+Stochastic(Length, RSVt, Kt, _rsv, _k, _d);
+		
+// 空方進場策略：K在高檔區由上往下穿越D值。出場策略：K由下往上突破D值。
+if _k > HighBound and _k crosses under _d then setposition(-1);
+if _k < LowBound and _k crosses above _d then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="b7b05b79-f2ec-420d-b4e9-4c58229da0d3" version="1"><Param name="計算期數" varname="Length" type="1" subtype="0" value="9" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="RSVt權數" varname="RSVt" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="Kt權數" varname="Kt" type="1" subtype="0" value="3" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="低檔區" varname="LowBound" type="1" subtype="0" value="25" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="高檔區" varname="HighBound" type="1" subtype="0" value="75" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="39f14c65-f11d-47a8-bf3d-f529b8622696" version="1" />]]></Plots>
+<RefFunc>1,Stochastic;1,CrossUnder;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="08-多單移動停利(點)" ID="dcaa8412ad3e4809b031831da4433042" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單移動停利(點)
+
+	設定停損點(如果不設定的話, 請把loss_point設定成0), 以及停利點, 跟回跌點數
+	價格下跌到停損時出場
+	價格上漲到停利點後啟動移動停利, 如果價格繼續上漲, 則繼續持有, 如果價格回檔超過回跌點數時, 則停利出場
+}
+
+input: profit_point(10, "停利(點)");
+input: profit_drawback_point(5, "停利回跌(點)");
+input: loss_point(10, "停損(點)");
+
+var: long_condition(false);			{ 進場買進作多 }
+
+{ 
+	範例:
+	
+	均線穿越時買進1張
+	以成交價為基礎, 設定固定停損以及移動停利
+}
+
+if profit_point = 0 then raiseruntimeerror("請設定停利(點)");
+if profit_drawback_point = 0 then raiseruntimeerror("請設定停利回跌(點)");
+if profit_drawback_point > profit_point then raiseruntimeerror("停利(點)需大於停利回跌(點)");
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+
+if Position = 0 and long_condition then begin
+	SetPosition(1);				{ 買進1張 }
+end;
+
+if Position = 1 and Filled = 1 then begin
+	var: intrabarpersist max_profit_point(0);	{ 啟動停利後最大獲利點 }
+
+	if loss_point > 0 and Close <= FilledAvgPrice - loss_point then begin
+		{ 停損 }
+		SetPosition(0);
+		max_profit_point = 0;
+
+	end else begin
+	
+		{ 判斷是否要啟動停利 }
+		if max_profit_point = 0 and Close >= FilledAvgPrice + profit_point then begin
+			max_profit_point = Close;
+		end;
+		
+		if max_profit_point <> 0 then begin		
+			if Close <= max_profit_point - profit_drawback_point then begin
+				{ 停利 }
+				SetPosition(0);
+				max_profit_point = 0;
+			end else if Close > max_profit_point then begin
+				{ 移動最大獲利點 }
+				max_profit_point = Close;
+			end;	
+		end;		
+	end;
+
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="a8ec32f7-17b1-409e-a2b7-823f093a881a" version="1"><Param name="停利(點)" varname="profit_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停利回跌(點)" varname="profit_drawback_point" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(點)" varname="loss_point" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="5a894fe4-35d3-40d9-9e93-241a8548c991" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="04-多單固定停利停損(%)" ID="32efbc0d43b8492993f7f10bc01c1eae" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	多單停損(%)
+}
+
+input: profit_percent(2, "停利(%)");
+input: loss_percent(2, "停損(%)");
+
+var: long_condition(false);			{ 進場買進作多 }
+
+{ 
+	範例:
+	
+	均線穿越時以市價買進1張
+	以成交價為基礎, 設定固定的停損/停利價格, 觸及時出場
+}
+
+long_condition = Average(Close, 5) cross over Average(Close, 20);
+
+if Position = 0 and long_condition then begin
+	SetPosition(1, MARKET);		{ 以市價買進 }
+end;
+
+if Position = 1 and Filled = 1 then begin
+	{ 依照成本價格設定停損/停利 }
+	
+	if profit_percent > 0 and Close >= FilledAvgPrice*(1+0.01*profit_percent) then begin
+		{ 停利 }
+		SetPosition(0);
+	end else if loss_percent > 0 and Close <= FilledAvgPrice*(1-0.01*loss_percent) then begin	
+		{ 停損 }
+		SetPosition(0);
+	end;
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="0e23bce0-8af2-4140-99b1-86e709120506" version="1"><Param name="停利(%)" varname="profit_percent" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(%)" varname="loss_percent" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="dd2c56f6-2ad9-4531-b0c1-4e424e886f6d" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="04-SetPosition範例#4(追價)" ID="54aea1ae8b99453ca828544e75fbb7ec" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	範例: 透過Filled來判斷是否需要追價
+	
+	當發生做多情境時, 買進1口
+	如果發生出場情境時, 多單出場(變成空手)
+	如果買進委託沒有成交的話, 則追價
+
+}
+
+
+{
+	當腳本呼叫SetPosition的話, 系統會依照目前委託/成交的情形, 決定如何送出委託單.
+	
+    以下情境假設一開始執行時Position = 0. 
+
+	情境#1
+	
+	腳本呼叫SetPosition(1)時, 系統送出一筆買進1口的委託單
+	經過一段時間後, 腳本呼叫SetPosition(0), 此時會發生以下的情形
+	
+	- 如果剛剛那一筆委託單已經成交(Position=1, Filled=1), 接下來SetPosition(0), 就會送出一筆賣出1口的委託
+	- 如果剛剛那一筆委託單還沒有成交(Position=1, Filled=0), 接下來SetPosition(0), 就會**刪除買進的那一筆委託**
+	  (這樣子的話, 使用者的部位就剛好是0)
+	
+	情境#2
+	
+	腳本呼叫SetPosition(1)時, 系統送出一筆買進1口的委託單
+	經過一段時間後, 腳本又呼叫SetPosition(1), 此時會發生以下的情形
+
+	- 如果剛剛那一筆委託單已經成交(Position=1, Filled=1), 接下來SetPosition(1), 不會送出任何委託
+	- 如果剛剛那一筆委託單還沒有成交(Position=1, Filled=0), 接下來SetPosition(1), 系統會執行以下的邏輯
+		- 如果新的SetPosition(1)的委託價格跟先前的委託價格**不一樣**的話, 則刪除剛剛的委託, 
+		  然後送出一筆買進1口的委託單(使用新的委託價格)
+		- 如果新的SetPosition(1)的委託價格跟先前的委託價格一樣的話, 則不會做任何動作
+
+	情境#3
+
+	腳本呼叫SetPosition(2)時, 送出一筆買進2口的委託單
+	經過一段時間後, 腳本又呼叫SetPosition(3), 此時會發生以下的情形
+	
+	- 如果剛剛那一筆委託單已經完全成交(Position=2, Filled=2)
+		- 接下來SetPosition(3), 就會送出一筆買進1口的委託
+	- 如果剛剛那一筆委託單都沒有成交(Position=2, Filled=0)
+		- 接下來SetPosition(3), 就會刪除先前的委託, 然後送出一筆買進3口的委託
+	- 如果剛剛那一筆委託單部分成交(Position=2, Filled=1)
+		- 接下來SetPosition(3), 就會刪除先前的委託, 然後送出一筆買進2口的委託
+	
+	小結:
+	
+	如果Position跟Filled一樣的話, 這個表示先前送出的委託都已經完全成交, 或是已經被取消. 
+	此時如果收到新的SetPosition()的話, 系統的動作是送出一筆買進或是賣出的委託
+
+	如果Position跟Filled不一樣的話, 這個表示目前應該有一筆[尚未完全成交的委託], 如果此時收到新的SetPosition()的話,
+	系統會先刪除目前這一筆委託, 確認這一筆委託的成交數量之後, 再依照新的需求決定如何送單.
+	
+}
+
+var: 
+	long_condition(false), 		{ 是否做多 }
+	exit_long_condition(false); { 是否多單出場 }
+
+
+if Position = 0 and long_condition then begin
+	{ 如果目前是空手, 且符合做多情境(long_condition), 則以目前收盤價買進1口, }
+	SetPosition(1, Close);
+
+end else if Position = 1 and exit_long_condition then begin
+	SetPosition(0);
+
+	{ 多單出場: 如果已經買到了, 就賣出剛剛買到的1口, 如果還沒有買到, 就取消買進的委託單 }
+	
+end else if Position = 1 and Filled = 0 then begin
+
+	{ 如果已經送出買進委託, 可是還沒有成交的話, 則追價(系統會刪除先前委託, 然後再送出買進1張) }
+	
+	SetPosition(1, Close);
+
+	{ 為了確保委託單排隊的順序, 如果新的委託價跟先前委託價格一樣的話, 系統就不會執行委託異動的動作 }
+
+end;	
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="0243a00e-7805-4089-bfe8-27bd752c0d40" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="a9d61a46-4a6b-412d-8929-81c6f96536b7" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="股價黃金交叉三均線" ID="2b1b06e22d434c3f816128911276fac6" ReturnType="0" ExecType="1" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: shortlength(5,"短期均線期數"), midlength(10,"中期均線期數"), Longlength(20,"長期均線期數");
+variable: shortaverage(0), midaverage(0), Longaverage(0);
+
+// 資料讀取筆數設定
+settotalbar(3);
+setbarback(maxlist(shortlength,midlength,Longlength));
+
+shortaverage=Average(close,shortlength);
+midaverage=Average(close,midlength) ;
+Longaverage=Average(close,Longlength); 
+
+// 多方進場策略：收盤價黃金交叉三均線。出場策略：收盤價死亡交叉三均線。
+if close cross above maxlist(shortaverage, midaverage, longaverage) then setposition(1);
+if close cross below minlist(shortaverage, midaverage, longaverage) then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="18609573-afcc-4ccf-8ec9-b4ea98a0ad93" version="1"><Param name="短期均線期數" varname="shortlength" type="1" subtype="0" value="5" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="中期均線期數" varname="midlength" type="1" subtype="0" value="10" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期均線期數" varname="Longlength" type="1" subtype="0" value="20" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="2f8c29f6-ddc1-4529-aa9f-2d27231b7951" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="3" />
+<IsScriptSetBB val="1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="02-SetPosition範例#1(多單1口)" ID="a6b88dd0256c482e8b48fc195695f5d8" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	範例: 
+	
+	當發生做多情境時, 買進1口
+	做多後發生出場情境時, 多單出場(變成空手)
+}
+
+var: 
+	long_condition(false), 		{ 是否做多 }
+	exit_long_condition(false); { 是否多單出場 }
+
+{ 
+	Position=0時判斷是否要做多, 
+	Position=1時判斷是否要出場 
+}
+if Position = 0 and long_condition then SetPosition(1);
+if Position = 1 and exit_long_condition then SetPosition(0);
+
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="ed86980b-96ce-4d7f-91cd-7e8000cdf19e" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="6fc846f5-f536-4f46-a016-b736ab5dd78c" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="01-SetPosition" ID="849a129d631845dd9b0d6d1d821d38a7" ReturnType="0" ExecType="1" Folder="/0-基本語法/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	Position代表的是這個商品在這個策略內的’預期部位’, Position是一個整數, 可以大於0, 也可以小於0.
+	
+	**請注意: 一個交易策略內可以跑多個商品，每個商品的Position是獨立的**
+	
+	當我們想要執行交易時, 就呼叫SetPosition這一個函數, 傳入我們預期的部位(同時也可以傳入委託價格).
+	
+	腳本開始執行時, 商品的Position預設數值是0, 當我們想要買進時, 就透過SetPosition把Position變大, 想要賣出時, 就透過
+	SetPosition把Position變小.
+	
+	系統收到了SetPosition()的呼叫之後, 就會依照目前的Position, 目前委託/成交的執行狀態, 決定如何送單, 來讓你的策略可以達到(成交)
+	這個新的預期的部位.
+		
+	SetPosition()可以接受兩個參數:
+	
+	第一個參數是預期的部位,
+	第二個參數是委託的價格, 這個參數如果不傳的話, 則會採用策略的預設買進/賣出價格
+	
+	請看以下範例
+}
+
+{
+	把部位(Position)變成1, 如果原先部位是0的話, 則等於買進1張
+	第二個參數(委託價格)如果不傳的話, 則使用策略設定內的預設價格	
+}
+SetPosition(1);	
+
+{
+	第二個參數可以傳入價格, MARKET是系統保留字, 代表是'市價'(期貨的話則會是'範圍市價')
+}
+SetPosition(1, MARKET);
+
+{
+	也可以傳入K棒的價格, 例如Close
+}
+SetPosition(1, Close);
+
+{
+	也可以傳入數值運算式
+}
+SetPosition(1, Close + 1.0);
+
+{
+	也可以傳入絕對值, 例如100.0
+}
+SetPosition(1, 100.0);
+
+{
+	支援檔位換算功能(AddSpread), 
+	AddSpread(Close, 1)表示是Close價格往上加1檔, AddSpread(Close, 2)表示加2檔
+	AddSpread(Close, -1)表示是Close價格往下減1檔
+	
+	AddSpread也可以用在警示腳本, 以及指標腳本
+}
+SetPosition(1, AddSpread(Close, 1));
+
+{
+	Position也可以是負的, 如果原先部位是0的話, 則等於賣出1張
+}
+SetPosition(-1);
+
+{
+	除了可以SetPosition之外, 也可以讀到目前的Position
+
+	SetPosition(Position+1)表示是加碼1張
+}
+value1 = Position;
+SetPosition(Position+1);
+
+{	
+	SetPosition的價格如果不符合商品的交易規則的話, 系統會自動轉換,
+	例如: 如果超過漲停價, 則只會送出漲停價,
+	例如: 如果不符合跳動點的話, 則會自動轉換到符合跳動點價格
+}
+SetPosition(1, 123.1);		{ 如果是買進台積電的話, 則會送出委託價格=123元 }
+
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="817d3f08-76ce-4589-97e2-47afb43452ab" version="1" />]]></Arg>
+<Plots><![CDATA[<Plots seed="d1e6c8af-c489-4a91-b520-d0c7c9605e72" version="1" />]]></Plots>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="短期RSI黃金交叉長期RSI" ID="b4190ecd9c6844fe80fb160f8beb3f49" ReturnType="0" ExecType="3" Folder="/常見技術分析/多頭/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[// 宣告參數
+input: ShortLength(6, "短期期數"), LongLength(12, "長期期數");
+var:RSI_Short(0), RSI_Long(0);
+
+// 設定資料讀取筆數
+settotalbar(maxlist(ShortLength,LongLength,6) * 8 + 8);
+
+RSI_Short=RSI(Close, ShortLength);
+RSI_Long=RSI(Close, LongLength);
+
+//多方進場策略：短期RSI黃金交叉長期RSI；出場策略：短期RSI死亡交叉長期RSI
+if RSI_Short Crosses Above RSI_Long then setposition(1);
+if RSI_Short Crosses below RSI_Long then setposition(0);]]></Code>
+<Arg><![CDATA[<Arg seed="50c2620f-c5bd-478f-ac51-2340d02f5e36" version="1"><Param name="短期期數" varname="ShortLength" type="1" subtype="0" value="6" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="長期期數" varname="LongLength" type="1" subtype="0" value="12" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="a89c7477-e314-41aa-8127-b95859d8cb24" version="1" />]]></Plots>
+<RefFunc>1,RSI;1,CrossOver;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+<IsScriptSetTB val="1" />
+<TotalBar val="-1" />
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+<Script Type="7" Name="05-空單固定停利停損(%)" ID="9cd0f149eedb4efcad0085a5fa8e80a5" ReturnType="0" ExecType="1" Folder="/2-下單出場方式/" StatusMask="2">
+<Desc><![CDATA[]]></Desc>
+<Code><![CDATA[{
+	空單停損(%)
+}
+
+input: profit_percent(2, "停利(%)");
+input: loss_percent(2, "停損(%)");
+
+var: short_condition(false);			{ 進場做空 }
+
+{ 
+	範例:
+	
+	均線跌破時以市價賣出1張做空
+	以成交價為基礎, 設定固定的停損/停利價格, 觸及時出場
+}
+
+short_condition = Average(Close, 5) cross under Average(Close, 20);
+
+if Position = 0 and short_condition then begin
+	SetPosition(-1, MARKET);		{ 以市價賣出 }
+end;
+
+if Position = -1 and Filled = -1 then begin
+	{ 依照成本價格設定停損/停利: 請注意當作空時, 判斷是否獲利的方向要改變 }
+	
+	if profit_percent > 0 and Close <= FilledAvgPrice*(1-0.01*profit_percent) then begin
+		{ 停利 }
+		SetPosition(0);
+	end else if loss_percent > 0 and Close >= FilledAvgPrice*(1+0.01*loss_percent) then begin	
+		{ 停損 }
+		SetPosition(0);
+	end;
+end;
+
+]]></Code>
+<Arg><![CDATA[<Arg seed="c15e7b84-7c3a-47d8-b98d-4896071da973" version="1"><Param name="停利(%)" varname="profit_percent" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /><Param name="停損(%)" varname="loss_percent" type="1" subtype="0" value="2" isSerial="0" isArray="0" isRef="0" inputkind="0" quickedit="0" keytype="0" /></Arg>]]></Arg>
+<Plots><![CDATA[<Plots seed="38943b5c-55e3-4f87-afb2-e8fc92a867d7" version="1" />]]></Plots>
+<RefFunc>1,Average;1,CrossUnder</RefFunc>
+<Extra><![CDATA[<Extra>
+<script>
+<freq support="8;9;10;11;12;13;14;15;16" />
+</script>
+</Extra>
+]]></Extra>
+<ScriptRunVer val="1" />
+</Script>
+</Scripts>

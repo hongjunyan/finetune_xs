@@ -1,0 +1,7 @@
+# Files
+*.ipynb
+
+
+# folders
+__pycache__/*
+finetune/*
